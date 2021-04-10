@@ -2,6 +2,8 @@ package com.consultation.studenthelp;
 
 import android.app.Application;
 
+import com.consultation.studenthelp.utils.SpUtils;
+
 
 public class StudentApp extends Application {
     private static StudentApp instance;
@@ -14,5 +16,6 @@ public class StudentApp extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
+        SpUtils.getInstance(this, "spConfig");
     }
 }

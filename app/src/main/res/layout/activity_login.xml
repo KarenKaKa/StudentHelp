@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        tools:context=".module.login.LoginActivity">
+
+        <ImageView
+            android:id="@+id/ivBack"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/icon_back_black"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginRight="30dp"
+            android:text="手机验证码登录"
+            android:textColor="#30365A"
+            android:textSize="24sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivBack"
+            tools:text="手机验证码登录" />
+
+        <EditText
+            android:id="@+id/etInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginRight="30dp"
+            android:hint="请输入手机号"
+            android:imeOptions="actionNext"
+            android:inputType="phone"
+            android:maxLines="1"
+            app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
+
+        <EditText
+            android:id="@+id/etInvitateCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="30dp"
+            android:hint="请输入验证码"
+            android:imeOptions="actionDone"
+            android:inputType="number"
+            android:maxLines="1"
+            app:layout_constraintTop_toBottomOf="@+id/etInput" />
+
+        <TextView
+            android:id="@+id/tvGetCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="获取验证码"
+            android:textColor="@color/pink"
+            app:layout_constraintBottom_toBottomOf="@+id/etInvitateCode"
+            app:layout_constraintRight_toRightOf="@id/etInvitateCode"
+            app:layout_constraintTop_toTopOf="@+id/etInvitateCode" />
+
+        <TextView
+            android:id="@+id/btnSubmit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginRight="30dp"
+            android:background="@drawable/shape_solid_f6729f_2"
+            android:gravity="center"
+            android:paddingVertical="11dp"
+            android:text="登录"
+            android:textColor="#fff"
+            android:textSize="15sp"
+            app:layout_constraintTop_toBottomOf="@+id/etInvitateCode" />
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            app:layout_constraintLeft_toLeftOf="@id/btnSubmit"
+            app:layout_constraintTop_toBottomOf="@+id/btnSubmit">
+
+            <RadioButton
+                android:id="@+id/rbStudent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="学生"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <RadioButton
+                android:id="@+id/rbTeacher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="教师"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </RadioGroup>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
