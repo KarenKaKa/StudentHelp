@@ -12,6 +12,9 @@ import com.consultation.studenthelp.R;
 import com.consultation.studenthelp.base.BaseActivity;
 import com.consultation.studenthelp.base.BasePresenter;
 import com.consultation.studenthelp.databinding.ActivityMainBinding;
+import com.consultation.studenthelp.module.main.home.HomeFragment;
+import com.consultation.studenthelp.module.main.mine.MineFragment;
+import com.consultation.studenthelp.module.main.news.NewsHomeFragment;
 import com.consultation.studenthelp.utils.Constants;
 
 public class MainActivity extends BaseActivity {
@@ -26,7 +29,6 @@ public class MainActivity extends BaseActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         binding.setLifecycleOwner(this);
 
-
         binding.rbHome.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -35,8 +37,7 @@ public class MainActivity extends BaseActivity {
                 }
             }
         });
-
-        binding.rbHome.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        binding.rbNews.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
@@ -44,8 +45,7 @@ public class MainActivity extends BaseActivity {
                 }
             }
         });
-
-        binding.rbHome.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        binding.rbMine.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
@@ -54,6 +54,7 @@ public class MainActivity extends BaseActivity {
             }
         });
         binding.rbHome.setChecked(true);
+        showFragment(Constants.TAG_FRAGMENT_HOME);
     }
 
     @Override
@@ -63,25 +64,37 @@ public class MainActivity extends BaseActivity {
 
     private void showFragment(String fragmentTag) {
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.hide(currFragment);
+        if (currFragment != null) {
+            fragmentTransaction.hide(currFragment);
+        }
         if (getSupportFragmentManager().findFragmentByTag(fragmentTag) == null) {
             switch (fragmentTag) {
                 case Constants.TAG_FRAGMENT_HOME:
-//                    currFragment = HomeFragment.newInstance();
+                    currFragment = HomeFragment.newInstance();
                     break;
                 case Constants.TAG_FRAGMENT_NEWS:
-//                    currFragment = NewsHomeFragment.newInstance();
+                    currFragment = NewsHomeFragment.newInstance();
                     break;
                 case Constants.TAG_FRAGMENT_MINE:
-//                    currFragment = MineFragment.newInstance();
+                    currFragment = MineFragment.newInstance();
                     break;
             }
             fragmentTransaction.add(R.id.fragment_container, currFragment, fragmentTag);
-
         } else {
             currFragment = getSupportFragmentManager().findFragmentByTag(fragmentTag);
             fragmentTransaction.show(currFragment);
         }
         fragmentTransaction.commitNowAllowingStateLoss();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (timeBackPress + 2000 > System.currentTimeMillis()) {
+            super.onBackPressed();
+        } else {
+            toast("再次点击退出应用");
+        }
+        timeBackPress = System.currentTimeMillis();
+
     }
 }
