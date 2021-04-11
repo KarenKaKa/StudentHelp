@@ -1,14 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".module.main.home.HomeFragment">
+<layout>
 
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="我的" />
+        tools:context=".module.main.home.HomeFragment">
 
-</FrameLayout>
+        <View
+            android:id="@+id/vTop"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:background="@color/pink"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivHead"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/icon_head"
+            app:layout_constraintBottom_toBottomOf="@id/vTop"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@id/vTop" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:text="寂寞的爱丽丝"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@id/ivHead"
+            app:layout_constraintLeft_toRightOf="@+id/ivHead"
+            app:layout_constraintTop_toTopOf="@+id/ivHead" />
+
+        <TextView
+            android:id="@+id/tvConsults"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:drawableLeft="@drawable/icon_consult"
+            android:drawableRight="@drawable/icon_arrow_right"
+            android:drawablePadding="10dp"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="20dp"
+            android:text="咨询列表"
+            android:textColor="#333"
+            app:layout_constraintTop_toBottomOf="@+id/vTop" />
+
+        <TextView
+            android:id="@+id/tvAppointment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/icon_date"
+            android:drawableRight="@drawable/icon_arrow_right"
+            android:drawablePadding="10dp"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="20dp"
+            android:text="我的预约"
+            android:textColor="#333"
+            app:layout_constraintTop_toBottomOf="@+id/tvConsults" />
+
+        <TextView
+            android:id="@+id/tvTests"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/icon_record"
+            android:drawableRight="@drawable/icon_arrow_right"
+            android:drawablePadding="10dp"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="20dp"
+            android:text="测试记录"
+            android:textColor="#333"
+            app:layout_constraintTop_toBottomOf="@+id/tvAppointment" />
+
+        <TextView
+            android:id="@+id/tvTeachers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/icon_like"
+            android:drawableRight="@drawable/icon_arrow_right"
+            android:drawablePadding="10dp"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="20dp"
+            android:text="我的关注"
+            android:textColor="#333"
+            app:layout_constraintTop_toBottomOf="@+id/tvTests" />
+
+        <TextView
+            android:id="@+id/tvLogout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/icon_logout"
+            android:drawableRight="@drawable/icon_arrow_right"
+            android:drawablePadding="10dp"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="20dp"
+            android:text="退出登录"
+            android:textColor="#333"
+            app:layout_constraintTop_toBottomOf="@+id/tvTeachers" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -29,4 +29,10 @@ public class UserSpUtils {
         return (String) SpUtils.getValue(USER_NAME, "");
     }
 
+    public static void logout() {
+        SpUtils.remove(IS_LOGIN);
+        SpUtils.remove(USER_NAME);
+        SpUtils.remove(USER_TYPE);
+    }
+
 }

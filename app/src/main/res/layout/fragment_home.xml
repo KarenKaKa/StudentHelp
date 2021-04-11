@@ -1,14 +1,213 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".module.main.home.HomeFragment">
 
-    <TextView
+    <com.youth.banner.Banner
+        android:id="@+id/banner"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="Home" />
+        android:layout_height="0dp"
+        android:background="@color/pink"
+        app:indicator_height="5dp"
+        app:indicator_normal_color="#CCFDFDFD"
+        app:indicator_normal_width="5dp"
+        app:indicator_selected_color="#E630355A"
+        app:indicator_selected_width="12dp"
+        app:indicator_space="5dp"
+        app:layout_constraintDimensionRatio="2:1"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/tvConsults"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableTop="@drawable/icon_consult"
+        android:drawablePadding="10dp"
+        android:paddingVertical="20dp"
+        android:text="心理咨询"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/tvTests"
+        app:layout_constraintTop_toBottomOf="@+id/banner" />
+
+    <TextView
+        android:id="@+id/tvTests"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableTop="@drawable/icon_consult"
+        android:drawablePadding="10dp"
+        android:text="心理测试"
+        app:layout_constraintBottom_toBottomOf="@+id/tvConsults"
+        app:layout_constraintLeft_toRightOf="@+id/tvConsults"
+        app:layout_constraintRight_toLeftOf="@+id/tvDate"
+        app:layout_constraintTop_toTopOf="@+id/tvConsults" />
+
+    <TextView
+        android:id="@+id/tvDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableTop="@drawable/icon_consult"
+        android:drawablePadding="10dp"
+        android:text="预约咨询"
+        app:layout_constraintBottom_toBottomOf="@+id/tvConsults"
+        app:layout_constraintLeft_toRightOf="@+id/tvTests"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvConsults" />
+
+    <TextView
+        android:id="@+id/tvSort1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingVertical="5dp"
+        android:text="情绪压力"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/tvSort2"
+        app:layout_constraintTop_toBottomOf="@+id/tvConsults" />
+
+    <TextView
+        android:id="@+id/tvSort2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingVertical="5dp"
+        android:text="情绪压力"
+        app:layout_constraintLeft_toRightOf="@+id/tvSort1"
+        app:layout_constraintRight_toLeftOf="@+id/tvSort3"
+        app:layout_constraintTop_toTopOf="@+id/tvSort1" />
+
+    <TextView
+        android:id="@+id/tvSort3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingVertical="5dp"
+        android:text="情绪压力"
+        app:layout_constraintLeft_toRightOf="@+id/tvSort2"
+        app:layout_constraintRight_toLeftOf="@+id/tvSort4"
+        app:layout_constraintTop_toTopOf="@+id/tvSort1" />
+
+    <TextView
+        android:id="@+id/tvSort4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingVertical="5dp"
+        android:text="情绪压力"
+        app:layout_constraintLeft_toRightOf="@+id/tvSort3"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvSort1" />
+
+    <TextView
+        android:id="@+id/tvSort5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingVertical="5dp"
+        android:text="情绪压力"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/tvSort6"
+        app:layout_constraintTop_toBottomOf="@+id/tvSort1" />
+
+    <TextView
+        android:id="@+id/tvSort6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingVertical="5dp"
+        android:text="情绪压力"
+        app:layout_constraintLeft_toRightOf="@+id/tvSort5"
+        app:layout_constraintRight_toLeftOf="@+id/tvSort7"
+        app:layout_constraintTop_toTopOf="@+id/tvSort5" />
+
+    <TextView
+        android:id="@+id/tvSort7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingVertical="5dp"
+        android:text="情绪压力"
+        app:layout_constraintLeft_toRightOf="@+id/tvSort6"
+        app:layout_constraintRight_toLeftOf="@+id/tvSort8"
+        app:layout_constraintTop_toTopOf="@+id/tvSort5" />
+
+    <TextView
+        android:id="@+id/tvSort8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingVertical="5dp"
+        android:text="情绪压力"
+        app:layout_constraintLeft_toRightOf="@+id/tvSort7"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvSort5" />
+
+    <View
+        android:layout_width="50dp"
+        android:layout_height="1dp"
+        android:background="@color/pink"
+        app:layout_constraintBottom_toBottomOf="@+id/tvTitle"
+        app:layout_constraintRight_toLeftOf="@+id/tvTitle"
+        app:layout_constraintTop_toTopOf="@+id/tvTitle" />
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:paddingHorizontal="10dp"
+        android:text="听你倾述"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvSort5" />
+
+    <View
+        android:layout_width="50dp"
+        android:layout_height="1dp"
+        android:background="@color/pink"
+        app:layout_constraintBottom_toBottomOf="@+id/tvTitle"
+        app:layout_constraintLeft_toRightOf="@+id/tvTitle"
+        app:layout_constraintTop_toTopOf="@+id/tvTitle" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cvTeacher"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="10dp"
+        android:translationZ="10dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTitle">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/ivHead"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/icon_head"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="张老师"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ivHead" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/tvTitle2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="人生答疑"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cvTeacher" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/tvTitle2" />
+</androidx.constraintlayout.widget.ConstraintLayout>
