@@ -4,40 +4,50 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RadioGroup;
-import android.widget.TextView;
+
+import androidx.databinding.DataBindingUtil;
 
 import com.consultation.studenthelp.R;
 import com.consultation.studenthelp.base.BaseActivity;
+import com.consultation.studenthelp.databinding.ActivityLoginBinding;
 import com.consultation.studenthelp.module.main.MainActivity;
+import com.consultation.studenthelp.utils.UserSpUtils;
+
+import cn.leancloud.sms.AVSMS;
+import cn.leancloud.sms.AVSMSOption;
+import cn.leancloud.types.AVNull;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 public class LoginActivity extends BaseActivity<LoginPresenter> implements LoginContract.View, View.OnClickListener {
-    private ImageView ivBack;
-    private EditText etInput;
-    private EditText etInvitateCode;
-    private TextView tvGetCode;
-    private TextView btnSubmit;
-    private RadioGroup radioGroup;
-
     private String userType = "1";
+    private ActivityLoginBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
+        binding.setLifecycleOwner(this);
 
         initView();
     }
 
     private void initView() {
-        ivBack = findViewById(R.id.ivBack);
-        etInput = findViewById(R.id.etInput);
-        etInvitateCode = findViewById(R.id.etInvitateCode);
-        tvGetCode = findViewById(R.id.tvGetCode);
-        btnSubmit = findViewById(R.id.btnSubmit);
-        radioGroup = findViewById(R.id.radioGroup);
+        binding.ivBack.setOnClickListener(this);
+        binding.etInvitateCode.setOnClickListener(this);
+        binding.tvGetCode.setOnClickListener(this);
+        binding.btnSubmit.setOnClickListener(this);
+        binding.radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                if (i == R.id.rbTeacher) {
+                    userType = "2";
+                } else {
+                    userType = "1";
+                }
+            }
+        });
     }
 
     @Override
@@ -56,29 +66,86 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.ivBack:
-                onBackPressed();
-                break;
-            case R.id.etInvitateCode:
-                break;
-            case R.id.tvGetCode:
-                break;
-            case R.id.btnSubmit:
-                String userName = etInput.getText().toString().trim();
-                String code = etInvitateCode.getText().toString().trim();
-                if (TextUtils.isEmpty(userName)) {
-                    toast("请输入手机号");
-                    return;
+        int id = view.getId();
+        if (id == R.id.ivBack) {
+            onBackPressed();
+        } else if (id == R.id.tvGetCode) {
+            getCode();
+        } else if (id == R.id.btnSubmit) {
+            String userName = binding.etInput.getText().toString().trim();
+            String code = binding.etInvitateCode.getText().toString().trim();
+            if (TextUtils.isEmpty(userName)) {
+                toast("请输入手机号");
+                return;
+            }
+            if (TextUtils.isEmpty(code)) {
+                toast("请输入验证码");
+                return;
+            }
+            AVSMS.verifySMSCodeInBackground(code, userName).subscribe(new Observer<AVNull>() {
+                @Override
+                public void onSubscribe(Disposable d) {
                 }
-                if (TextUtils.isEmpty(code)) {
-                    toast("请输入验证码");
-                    return;
+
+                @Override
+                public void onNext(AVNull avNull) {
+                    UserSpUtils.setIsLogin(true);
+                    UserSpUtils.setUserType(userType);
+                    UserSpUtils.setUserName(userName);
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    finish();
                 }
-                mPresenter.login(userType, userName, code);
-                break;
+
+                @Override
+                public void onError(Throwable throwable) {
+                    toast(throwable.getMessage());
+                    //TODO 审核通过之后删除
+                    UserSpUtils.setIsLogin(true);
+                    UserSpUtils.setUserType(userType);
+                    UserSpUtils.setUserName(userName);
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    finish();
+                }
+
+                @Override
+                public void onComplete() {
+                }
+            });
         }
     }
+
+    private void getCode() {
+        String userName = binding.etInput.getText().toString().trim();
+        if (TextUtils.isEmpty(userName)) {
+            toast("请输入手机号");
+            return;
+        }
+
+        AVSMSOption option = new AVSMSOption();
+        option.setTtl(6);
+        option.setApplicationName("大学生心理咨询");
+        option.setOperation("登录注册");
+        AVSMS.requestSMSCodeInBackground(userName, option).subscribe(new Observer<AVNull>() {
+            @Override
+            public void onSubscribe(Disposable disposable) {
+            }
+
+            @Override
+            public void onNext(AVNull avNull) {
+                toast("短信发送成功");
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+                toast("短信发送失败：" + throwable.getMessage());
+            }
+
+            @Override
+            public void onComplete() {
+            }
+        });
+    }
+
 
     @Override
     public void loginSuccess() {

@@ -1,51 +1,87 @@
 package com.consultation.studenthelp.module.main;
 
 import android.os.Bundle;
-import android.view.View;
-import android.widget.TextView;
+import android.widget.CompoundButton;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.consultation.studenthelp.R;
 import com.consultation.studenthelp.base.BaseActivity;
+import com.consultation.studenthelp.base.BasePresenter;
+import com.consultation.studenthelp.databinding.ActivityMainBinding;
+import com.consultation.studenthelp.utils.Constants;
 
-import java.util.HashMap;
-
-public class MainActivity extends BaseActivity<MainPresenter> implements MainView {
-    private TextView textView;
+public class MainActivity extends BaseActivity {
+    private ActivityMainBinding binding;
+    private Long timeBackPress = 0l;
+    private Fragment currFragment;
+    private FragmentTransaction fragmentTransaction;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        binding.setLifecycleOwner(this);
 
-        textView = findViewById(R.id.text);
 
-        textView.setOnClickListener(new View.OnClickListener() {
+        binding.rbHome.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View view) {
-                mPresenter.getUserInfo(new HashMap());
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    showFragment(Constants.TAG_FRAGMENT_HOME);
+                }
             }
         });
+
+        binding.rbHome.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    showFragment(Constants.TAG_FRAGMENT_NEWS);
+                }
+            }
+        });
+
+        binding.rbHome.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    showFragment(Constants.TAG_FRAGMENT_MINE);
+                }
+            }
+        });
+        binding.rbHome.setChecked(true);
     }
 
     @Override
-    protected MainPresenter createPresenter() {
-        return new MainPresenter(this);
+    protected BasePresenter createPresenter() {
+        return null;
     }
 
-    @Override
-    public void setText(String hahahahah) {
-        textView.setText(hahahahah);
-    }
+    private void showFragment(String fragmentTag) {
+        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.hide(currFragment);
+        if (getSupportFragmentManager().findFragmentByTag(fragmentTag) == null) {
+            switch (fragmentTag) {
+                case Constants.TAG_FRAGMENT_HOME:
+//                    currFragment = HomeFragment.newInstance();
+                    break;
+                case Constants.TAG_FRAGMENT_NEWS:
+//                    currFragment = NewsHomeFragment.newInstance();
+                    break;
+                case Constants.TAG_FRAGMENT_MINE:
+//                    currFragment = MineFragment.newInstance();
+                    break;
+            }
+            fragmentTransaction.add(R.id.fragment_container, currFragment, fragmentTag);
 
-
-    @Override
-    public void showLoading() {
-    }
-
-    @Override
-    public void hideLoading() {
+        } else {
+            currFragment = getSupportFragmentManager().findFragmentByTag(fragmentTag);
+            fragmentTransaction.show(currFragment);
+        }
+        fragmentTransaction.commitNowAllowingStateLoss();
     }
 }
