@@ -1,5 +1,6 @@
 package com.consultation.studenthelp.module.main.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,12 +13,13 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import com.consultation.studenthelp.R;
 import com.consultation.studenthelp.base.BaseFragment;
 import com.consultation.studenthelp.databinding.FragmentHomeBinding;
+import com.consultation.studenthelp.module.teachers.TeachersActivity;
 import com.consultation.studenthelp.net.vo.NewsBean;
 import com.consultation.studenthelp.net.vo.UserBean;
 
 import java.util.List;
 
-public class HomeFragment extends BaseFragment {
+public class HomeFragment extends BaseFragment implements View.OnClickListener {
     private FragmentHomeBinding binding;
     private HomeTeacherAdapter teacherAdapter;
 
@@ -38,6 +40,7 @@ public class HomeFragment extends BaseFragment {
         binding = DataBindingUtil.bind(view);
         binding.setLifecycleOwner(this);
 
+        binding.tvConsults.setOnClickListener(this);
     }
 
     @Override
@@ -56,5 +59,13 @@ public class HomeFragment extends BaseFragment {
 
         binding.recyclerNews.setAdapter(new HomeNewsAdapter(getContext(),
                 List.of(new NewsBean("", ""), new NewsBean("", ""), new NewsBean("", ""), new NewsBean("", ""), new NewsBean("", ""), new NewsBean("", ""), new NewsBean("", ""), new NewsBean("", ""), new NewsBean("", ""))));
+    }
+
+    @Override
+    public void onClick(View view) {
+        int id = view.getId();
+        if (id == R.id.tvConsults) {
+            startActivity(new Intent(getActivity(), TeachersActivity.class));
+        }
     }
 }
