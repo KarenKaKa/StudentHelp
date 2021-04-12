@@ -59,6 +59,9 @@ public class TeachersAdapter extends RecyclerView.Adapter<TeachersAdapter.Teache
             holder.label3.setVisibility(View.VISIBLE);
             holder.label3.setText(label[2]);
         }
+
+        holder.tvChat.setText(bean.getBoolean(UserInfo.USER_AVAILABLE) ? "咨询" : "留言");
+        holder.tvChat.setBackgroundResource(bean.getBoolean(UserInfo.USER_AVAILABLE) ? R.drawable.shape_solid_deb887_15 : R.drawable.shape_solid_a4d3ee_15);
     }
 
     @Override
@@ -73,6 +76,7 @@ public class TeachersAdapter extends RecyclerView.Adapter<TeachersAdapter.Teache
         private TextView label2;
         private TextView label3;
         private ImageView gender;
+        private TextView tvChat;
 
         public TeacherViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -82,6 +86,7 @@ public class TeachersAdapter extends RecyclerView.Adapter<TeachersAdapter.Teache
             label2 = itemView.findViewById(R.id.label2);
             label3 = itemView.findViewById(R.id.label3);
             gender = itemView.findViewById(R.id.gender);
+            tvChat = itemView.findViewById(R.id.tvChat);
         }
     }
 }

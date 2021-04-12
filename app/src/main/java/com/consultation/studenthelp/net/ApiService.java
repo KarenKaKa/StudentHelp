@@ -10,7 +10,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 
 public interface ApiService {
-    @FormUrlEncoded
-    @POST("/web/identity/userIdentityStatus")
-    Observable<UserInfo> userIdentityStatus(@FieldMap HashMap<String, String> map);
+//    @FormUrlEncoded
+//    @POST("")
+//    Observable<UserInfo> userInfo(@FieldMap HashMap<String, String> map);
 }

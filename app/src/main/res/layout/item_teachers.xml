@@ -56,7 +56,7 @@
         android:paddingVertical="2dp"
         android:text="个人成长"
         android:textColor="#737373"
-        android:textSize="8sp"
+        android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="@+id/ivHead"
         app:layout_constraintLeft_toLeftOf="@+id/name" />
 
@@ -70,7 +70,7 @@
         android:paddingVertical="2dp"
         android:text="个人成长"
         android:textColor="#737373"
-        android:textSize="8sp"
+        android:textSize="10sp"
         android:visibility="gone"
         app:layout_constraintLeft_toRightOf="@+id/label1"
         app:layout_constraintTop_toTopOf="@+id/label1" />
@@ -85,16 +85,17 @@
         android:paddingVertical="2dp"
         android:text="个人成长"
         android:textColor="#737373"
-        android:textSize="8sp"
+        android:textSize="10sp"
         android:visibility="gone"
         app:layout_constraintLeft_toRightOf="@+id/label2"
         app:layout_constraintTop_toTopOf="@+id/label1" />
 
     <TextView
+        android:id="@+id/tvChat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/shape_solid_deb887_15"
-        android:paddingHorizontal="15dp"
+        android:paddingHorizontal="25dp"
         android:paddingVertical="5dp"
         android:text="咨询"
         android:textColor="@color/white"
