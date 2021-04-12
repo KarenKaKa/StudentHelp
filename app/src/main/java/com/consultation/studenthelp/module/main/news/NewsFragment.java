@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.consultation.studenthelp.R;
 import com.consultation.studenthelp.base.BaseFragment;
 import com.consultation.studenthelp.module.main.home.HomeNewsAdapter;
-import com.consultation.studenthelp.module.main.home.NewsBean;
+import com.consultation.studenthelp.net.vo.NewsBean;
 
 import java.util.List;
 

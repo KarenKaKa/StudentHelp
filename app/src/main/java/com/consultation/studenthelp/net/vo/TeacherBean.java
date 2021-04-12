@@ -1,4 +1,4 @@
-package com.consultation.studenthelp.module.main.home;
+package com.consultation.studenthelp.net.vo;
 
 
 public class TeacherBean {

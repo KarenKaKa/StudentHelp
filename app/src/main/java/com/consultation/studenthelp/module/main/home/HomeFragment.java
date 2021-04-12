@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import com.consultation.studenthelp.R;
 import com.consultation.studenthelp.base.BaseFragment;
 import com.consultation.studenthelp.databinding.FragmentHomeBinding;
+import com.consultation.studenthelp.net.vo.NewsBean;
+import com.consultation.studenthelp.net.vo.TeacherBean;
 
 import java.util.List;
 
