@@ -92,7 +92,7 @@ public class MainActivity extends BaseActivity {
         if (timeBackPress + 2000 > System.currentTimeMillis()) {
             super.onBackPressed();
         } else {
-            toast("再次点击退出应用");
+            toast("再次点击退出应用~");
         }
         timeBackPress = System.currentTimeMillis();
 
