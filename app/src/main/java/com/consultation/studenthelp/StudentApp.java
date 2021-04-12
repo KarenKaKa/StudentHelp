@@ -21,7 +21,7 @@ public class StudentApp extends Application {
         instance = this;
         SpUtils.getInstance(this, "spConfig");
 
-        AVOSCloud.initialize(this, "{{EbbwkkutKs8hiC6dYN1Kk5kQ-9Nh9j0Va}}", "{{X1TgNrdGmBhhBzxzpTq3bL40}}", "https://ebbwkkut.lc-cn-e1-shared.com");
+        AVOSCloud.initialize(this, "EbbwkkutKs8hiC6dYN1Kk5kQ-9Nh9j0Va", "X1TgNrdGmBhhBzxzpTq3bL40", "https://ebbwkkut.lc-cn-e1-shared.com");
         // 在 AVOSCloud.initialize() 之前调用
         AVOSCloud.setLogLevel(AVLogger.Level.DEBUG);
     }

@@ -1,13 +1,8 @@
 package com.consultation.studenthelp.net.vo;
 
 public class UserInfo {
-    private String status;
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
+    public static final String USER_NAME = "name";
+    public static final String USER_GENDER = "gender";
+    public static final String USER_LABELS = "labels";
+    public static final String USER_SKILLS = "skills";
 }

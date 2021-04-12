@@ -8,9 +8,11 @@ import androidx.databinding.DataBindingUtil;
 import com.consultation.studenthelp.R;
 import com.consultation.studenthelp.base.BaseActivity;
 import com.consultation.studenthelp.databinding.ActivityTeachersBinding;
-import com.consultation.studenthelp.net.vo.UserBean;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import cn.leancloud.AVObject;
 
 /**
  * 咨询师列表
@@ -18,7 +20,7 @@ import java.util.List;
 public class TeachersActivity extends BaseActivity<TeachersPresenter> implements TeachersView {
     private ActivityTeachersBinding binding;
     private TeachersAdapter adapter;
-    private List<UserBean> teachers;
+    private List<AVObject> teachers = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,8 +56,8 @@ public class TeachersActivity extends BaseActivity<TeachersPresenter> implements
     }
 
     @Override
-    public void setData(List<UserBean> students) {
-        teachers = students;
+    public void setData(List<AVObject> students) {
+        teachers.addAll(students);
         adapter.notifyDataSetChanged();
     }
 }

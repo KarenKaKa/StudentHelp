@@ -6,7 +6,9 @@ import com.consultation.studenthelp.net.vo.UserBean;
 
 import java.util.List;
 
+import cn.leancloud.AVObject;
+
 public interface TeachersView extends BaseView {
 
-    void setData(List<UserBean> students);
+    void setData(List<AVObject> students);
 }

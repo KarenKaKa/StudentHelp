@@ -11,16 +11,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.consultation.studenthelp.R;
-import com.consultation.studenthelp.net.vo.UserBean;
+import com.consultation.studenthelp.net.vo.UserInfo;
 
 import java.util.List;
+
+import cn.leancloud.AVObject;
 
 public class TeachersAdapter extends RecyclerView.Adapter<TeachersAdapter.TeacherViewHolder> {
 
     private Context mContext;
-    private List<UserBean> list;
+    private List<AVObject> list;
 
-    public TeachersAdapter(Context mContext, List<UserBean> list) {
+    public TeachersAdapter(Context mContext, List<AVObject> list) {
         this.mContext = mContext;
         this.list = list;
     }
@@ -34,16 +36,16 @@ public class TeachersAdapter extends RecyclerView.Adapter<TeachersAdapter.Teache
 
     @Override
     public void onBindViewHolder(@NonNull TeacherViewHolder holder, int position) {
-        UserBean bean = list.get(position);
-        holder.name.setText(bean.getName());
-        holder.skills.setText(bean.getSkills());
-        holder.gender.setImageResource(bean.getGender().equals("男") ? R.drawable.icon_man : R.drawable.icon_women);
-        holder.name.setText(bean.getName());
+        AVObject bean = list.get(position);
+        holder.name.setText(bean.getString(UserInfo.USER_NAME));
+        holder.skills.setText(bean.getString(UserInfo.USER_SKILLS));
+        holder.gender.setImageResource(bean.getString(UserInfo.USER_GENDER).equals("男") ? R.drawable.icon_man : R.drawable.icon_women);
+        holder.name.setText(bean.getString(UserInfo.USER_NAME));
 
         holder.label1.setVisibility(View.GONE);
         holder.label2.setVisibility(View.GONE);
         holder.label3.setVisibility(View.GONE);
-        String labels = bean.getLabels();
+        String labels = bean.getString(UserInfo.USER_LABELS);
         String[] label = labels.split(",");
         if (label.length >= 1) {
             holder.label1.setVisibility(View.VISIBLE);
