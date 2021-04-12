@@ -35,7 +35,7 @@
                 android:id="@+id/rb_news"
                 style="@style/bottom_radiobutton"
                 android:drawableTop="@drawable/selector_main_find"
-                android:text="问答" />
+                android:text="阅读" />
 
             <androidx.appcompat.widget.AppCompatRadioButton
                 android:id="@+id/rb_mine"

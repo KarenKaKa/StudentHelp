@@ -14,7 +14,7 @@ import com.consultation.studenthelp.base.BasePresenter;
 import com.consultation.studenthelp.databinding.ActivityMainBinding;
 import com.consultation.studenthelp.module.main.home.HomeFragment;
 import com.consultation.studenthelp.module.main.mine.MineFragment;
-import com.consultation.studenthelp.module.main.news.NewsHomeFragment;
+import com.consultation.studenthelp.module.main.news.NewsFragment;
 import com.consultation.studenthelp.utils.Constants;
 
 public class MainActivity extends BaseActivity {
@@ -73,7 +73,7 @@ public class MainActivity extends BaseActivity {
                     currFragment = HomeFragment.newInstance();
                     break;
                 case Constants.TAG_FRAGMENT_NEWS:
-                    currFragment = NewsHomeFragment.newInstance();
+                    currFragment = NewsFragment.newInstance();
                     break;
                 case Constants.TAG_FRAGMENT_MINE:
                     currFragment = MineFragment.newInstance();
