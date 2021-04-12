@@ -12,6 +12,7 @@ import com.consultation.studenthelp.R;
 import com.consultation.studenthelp.base.BaseActivity;
 import com.consultation.studenthelp.databinding.ActivityLoginBinding;
 import com.consultation.studenthelp.module.main.MainActivity;
+import com.consultation.studenthelp.module.teacher.TeacherMainActivity;
 import com.consultation.studenthelp.utils.UserSpUtils;
 
 import cn.leancloud.sms.AVSMS;
@@ -38,6 +39,14 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         binding.etInvitateCode.setOnClickListener(this);
         binding.tvGetCode.setOnClickListener(this);
         binding.btnSubmit.setOnClickListener(this);
+
+        if (UserSpUtils.getUserType().equals("1")) {
+            binding.rbStudent.setChecked(true);
+            userType = "1";
+        } else {
+            binding.rbTeacher.setChecked(true);
+            userType = "2";
+        }
         binding.radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
@@ -92,7 +101,11 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
                     UserSpUtils.setIsLogin(true);
                     UserSpUtils.setUserType(userType);
                     UserSpUtils.setUserName(userName);
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    if (userType.equals("1")) {
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    } else {
+                        startActivity(new Intent(LoginActivity.this, TeacherMainActivity.class));
+                    }
                     finish();
                 }
 
@@ -103,7 +116,11 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
                     UserSpUtils.setIsLogin(true);
                     UserSpUtils.setUserType(userType);
                     UserSpUtils.setUserName(userName);
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    if (userType.equals("1")) {
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    } else {
+                        startActivity(new Intent(LoginActivity.this, TeacherMainActivity.class));
+                    }
                     finish();
                 }
 

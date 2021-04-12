@@ -32,7 +32,6 @@ public class UserSpUtils {
     public static void logout() {
         SpUtils.remove(IS_LOGIN);
         SpUtils.remove(USER_NAME);
-        SpUtils.remove(USER_TYPE);
     }
 
 }
