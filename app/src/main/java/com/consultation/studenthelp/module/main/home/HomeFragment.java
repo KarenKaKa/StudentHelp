@@ -13,7 +13,7 @@ import com.consultation.studenthelp.R;
 import com.consultation.studenthelp.base.BaseFragment;
 import com.consultation.studenthelp.databinding.FragmentHomeBinding;
 import com.consultation.studenthelp.net.vo.NewsBean;
-import com.consultation.studenthelp.net.vo.TeacherBean;
+import com.consultation.studenthelp.net.vo.UserBean;
 
 import java.util.List;
 
@@ -50,8 +50,8 @@ public class HomeFragment extends BaseFragment {
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
         binding.recyclerTeacher.setLayoutManager(layoutManager);
         binding.recyclerTeacher.setAdapter(new HomeTeacherAdapter(getContext(),
-                List.of(new TeacherBean("张老师", "资深心理咨询师"), new TeacherBean("李兰香", "心理硕士")
-                        , new TeacherBean("王雪松", "国际二级心理咨询师"), new TeacherBean("孙雅苑", "北大心理硕士"))));
+                List.of(new UserBean("张老师", "资深心理咨询师"), new UserBean("李兰香", "心理硕士")
+                        , new UserBean("王雪松", "国际二级心理咨询师"), new UserBean("孙雅苑", "北大心理硕士"))));
 
 
         binding.recyclerNews.setAdapter(new HomeNewsAdapter(getContext(),

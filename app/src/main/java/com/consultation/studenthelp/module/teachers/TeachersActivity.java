@@ -8,12 +8,17 @@ import androidx.databinding.DataBindingUtil;
 import com.consultation.studenthelp.R;
 import com.consultation.studenthelp.base.BaseActivity;
 import com.consultation.studenthelp.databinding.ActivityTeachersBinding;
+import com.consultation.studenthelp.net.vo.UserBean;
+
+import java.util.List;
 
 /**
  * 咨询师列表
  */
 public class TeachersActivity extends BaseActivity<TeachersPresenter> implements TeachersView {
     private ActivityTeachersBinding binding;
+    private TeachersAdapter adapter;
+    private List<UserBean> teachers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +32,10 @@ public class TeachersActivity extends BaseActivity<TeachersPresenter> implements
                 onBackPressed();
             }
         });
-//        binding.recyclerTeacher.setAdapter();
+        adapter = new TeachersAdapter(this, teachers);
+        binding.recyclerTeacher.setAdapter(adapter);
+
+        mPresenter.getTeachers();
     }
 
     @Override
@@ -43,5 +51,11 @@ public class TeachersActivity extends BaseActivity<TeachersPresenter> implements
     @Override
     public void hideLoading() {
 
+    }
+
+    @Override
+    public void setData(List<UserBean> students) {
+        teachers = students;
+        adapter.notifyDataSetChanged();
     }
 }

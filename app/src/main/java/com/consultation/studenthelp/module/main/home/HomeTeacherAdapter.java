@@ -10,15 +10,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.consultation.studenthelp.R;
-import com.consultation.studenthelp.net.vo.TeacherBean;
+import com.consultation.studenthelp.net.vo.UserBean;
 
 import java.util.List;
 
 public class HomeTeacherAdapter extends RecyclerView.Adapter<HomeTeacherAdapter.HomeTeacherViewHolder> {
     private Context mContext;
-    private List<TeacherBean> list;
+    private List<UserBean> list;
 
-    public HomeTeacherAdapter(Context mContext, List<TeacherBean> list) {
+    public HomeTeacherAdapter(Context mContext, List<UserBean> list) {
         this.mContext = mContext;
         this.list = list;
     }
@@ -31,8 +31,8 @@ public class HomeTeacherAdapter extends RecyclerView.Adapter<HomeTeacherAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull HomeTeacherViewHolder holder, int position) {
-        TeacherBean bean = list.get(position);
-        holder.name.setText(bean.getName() + "\n" + bean.getGoodAt());
+        UserBean bean = list.get(position);
+        holder.name.setText(bean.getName() + "\n" + bean.getSkills());
     }
 
     @Override

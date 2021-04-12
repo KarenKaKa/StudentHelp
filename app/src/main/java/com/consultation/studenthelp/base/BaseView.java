@@ -4,4 +4,6 @@ public interface BaseView {
     void showLoading();
 
     void hideLoading();
+
+    void toast(String message);
 }

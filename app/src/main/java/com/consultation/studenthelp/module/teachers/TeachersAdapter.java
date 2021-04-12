@@ -11,16 +11,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.consultation.studenthelp.R;
-import com.consultation.studenthelp.net.vo.TeacherBean;
+import com.consultation.studenthelp.net.vo.UserBean;
 
 import java.util.List;
 
 public class TeachersAdapter extends RecyclerView.Adapter<TeachersAdapter.TeacherViewHolder> {
 
     private Context mContext;
-    private List<TeacherBean> list;
+    private List<UserBean> list;
 
-    public TeachersAdapter(Context mContext, List<TeacherBean> list) {
+    public TeachersAdapter(Context mContext, List<UserBean> list) {
         this.mContext = mContext;
         this.list = list;
     }
@@ -34,7 +34,29 @@ public class TeachersAdapter extends RecyclerView.Adapter<TeachersAdapter.Teache
 
     @Override
     public void onBindViewHolder(@NonNull TeacherViewHolder holder, int position) {
+        UserBean bean = list.get(position);
+        holder.name.setText(bean.getName());
+        holder.skills.setText(bean.getSkills());
+        holder.gender.setImageResource(bean.getGender().equals("男") ? R.drawable.icon_man : R.drawable.icon_women);
+        holder.name.setText(bean.getName());
 
+        holder.label1.setVisibility(View.GONE);
+        holder.label2.setVisibility(View.GONE);
+        holder.label3.setVisibility(View.GONE);
+        String labels = bean.getLabels();
+        String[] label = labels.split(",");
+        if (label.length >= 1) {
+            holder.label1.setVisibility(View.VISIBLE);
+            holder.label1.setText(label[0]);
+        }
+        if (label.length >= 2) {
+            holder.label2.setVisibility(View.VISIBLE);
+            holder.label2.setText(label[1]);
+        }
+        if (label.length >= 3) {
+            holder.label3.setVisibility(View.VISIBLE);
+            holder.label3.setText(label[2]);
+        }
     }
 
     @Override
