@@ -79,6 +79,7 @@
         </LinearLayout>
 
         <TextView
+            android:layout_marginLeft="15dp"
             android:id="@+id/conversation_item_tv_message"
             style="@style/LCIMTextAppearance.Normal.Gray"
             android:layout_width="match_parent"
