@@ -52,7 +52,8 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
         if (id == R.id.ivHead) {
             toast("修改头像");
         } else if (id == R.id.tvConsults) {
-            toast("咨询列表");
+            startActivity(new Intent(getActivity(), MyConversationListActivity.class));
+            Objects.requireNonNull(getActivity()).finish();
         } else if (id == R.id.tvAppointment) {
             toast("我的预约");
         } else if (id == R.id.tvTests) {
