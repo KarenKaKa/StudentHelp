@@ -1,22 +1,31 @@
 package com.consultation.studenthelp.module.teachers;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.consultation.studenthelp.R;
 import com.consultation.studenthelp.net.vo.UserInfo;
+import com.consultation.studenthelp.utils.Constants;
 
 import java.util.List;
 
 import cn.leancloud.AVObject;
+import cn.leancloud.chatkit.LCChatKit;
+import cn.leancloud.chatkit.activity.LCIMConversationActivity;
+import cn.leancloud.chatkit.utils.LCIMConstants;
+import cn.leancloud.im.v2.AVIMClient;
+import cn.leancloud.im.v2.AVIMException;
+import cn.leancloud.im.v2.callback.AVIMClientCallback;
 
 //TODO 待做分类筛选项
 public class TeachersAdapter extends RecyclerView.Adapter<TeachersAdapter.TeacherViewHolder> {
@@ -67,6 +76,36 @@ public class TeachersAdapter extends RecyclerView.Adapter<TeachersAdapter.Teache
 
         holder.tvChat.setText(bean.getBoolean(UserInfo.USER_AVAILABLE) ? "咨询" : "留言");
         holder.tvChat.setBackgroundResource(bean.getBoolean(UserInfo.USER_AVAILABLE) ? R.drawable.shape_solid_deb887_15 : R.drawable.shape_solid_a4d3ee_15);
+        holder.tvChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (bean.getBoolean(UserInfo.USER_AVAILABLE)) {
+                    // TODO: 2021/4/13 删除
+                    AVIMClient client = AVIMClient.getInstance(Constants.TEST_KEY1);
+                    client.open(new AVIMClientCallback() {
+                        @Override
+                        public void done(AVIMClient client, AVIMException e) {
+//                        StudentApp.getInstance().client = client;
+                            LCChatKit.getInstance().open(Constants.TEST_KEY1, new AVIMClientCallback() {
+                                @Override
+                                public void done(AVIMClient client, AVIMException e) {
+                                    if (null == e) {
+                                        Intent intent = new Intent(mContext, LCIMConversationActivity.class);
+                                        intent.putExtra(LCIMConstants.PEER_ID, Constants.TEST_KEY2);
+                                        mContext.startActivity(intent);
+                                    } else {
+                                        Toast.makeText(mContext, e.toString(), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                        }
+                    });
+
+                }else {
+
+                }
+            }
+        });
     }
 
     @Override

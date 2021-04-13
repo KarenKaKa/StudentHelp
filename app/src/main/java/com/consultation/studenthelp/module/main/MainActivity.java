@@ -17,6 +17,11 @@ import com.consultation.studenthelp.module.main.mine.MineFragment;
 import com.consultation.studenthelp.module.main.news.NewsFragment;
 import com.consultation.studenthelp.utils.Constants;
 
+import cn.leancloud.chatkit.LCChatKit;
+import cn.leancloud.im.v2.AVIMClient;
+import cn.leancloud.im.v2.AVIMException;
+import cn.leancloud.im.v2.callback.AVIMClientCallback;
+
 public class MainActivity extends BaseActivity {
     private ActivityMainBinding binding;
     private Long timeBackPress = 0l;
@@ -28,7 +33,6 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         binding.setLifecycleOwner(this);
-
         binding.rbHome.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {

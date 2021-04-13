@@ -1,7 +1,10 @@
 package com.consultation.studenthelp.module.login;
 
 import android.text.TextUtils;
+import android.util.Log;
+import android.widget.Toast;
 
+import com.consultation.studenthelp.StudentApp;
 import com.consultation.studenthelp.base.BasePresenter;
 import com.consultation.studenthelp.net.vo.UserInfo;
 import com.consultation.studenthelp.utils.UserSpUtils;
@@ -11,6 +14,11 @@ import java.util.List;
 import cn.leancloud.AVObject;
 import cn.leancloud.AVQuery;
 import cn.leancloud.AVUser;
+import cn.leancloud.chatkit.LCChatKit;
+import cn.leancloud.im.AVIMOptions;
+import cn.leancloud.im.v2.AVIMClient;
+import cn.leancloud.im.v2.AVIMException;
+import cn.leancloud.im.v2.callback.AVIMClientCallback;
 import cn.leancloud.sms.AVSMS;
 import cn.leancloud.sms.AVSMSOption;
 import cn.leancloud.types.AVNull;
@@ -18,11 +26,11 @@ import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
 public class LoginPresenter extends BasePresenter<LoginContract.View> {
+    private String objectId = "";
+
     public LoginPresenter(LoginContract.View view) {
         attachView(view);
     }
-
-    private String objectId = "";
 
     public void getCode(String userName) {
         if (TextUtils.isEmpty(userName)) {
@@ -131,9 +139,17 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> {
         user.put(UserInfo.USER_TYPE, userType);
         user.saveInBackground().subscribe(new Observer<AVObject>() {
             public void onSubscribe(Disposable disposable) {
+
             }
 
             public void onNext(AVObject user) {
+                AVIMClient client = AVIMClient.getInstance(user.getObjectId());
+                client.open(new AVIMClientCallback() {
+                    @Override
+                    public void done(AVIMClient client, AVIMException e) {
+//                        StudentApp.getInstance().client = client;
+                    }
+                });
                 UserSpUtils.setIsLogin(true);
                 UserSpUtils.setUserType(userType);
                 UserSpUtils.setUserName(userName);

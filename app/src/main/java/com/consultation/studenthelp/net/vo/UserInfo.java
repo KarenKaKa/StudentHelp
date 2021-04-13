@@ -4,7 +4,7 @@ package com.consultation.studenthelp.net.vo;
  * 用户表
  */
 public class UserInfo {
-    public static final String TABLE_NAME = "Teachers";
+    public static final String TABLE_NAME = "_User";
     public static final String USER_PHONE = "phone";
     public static final String USER_TYPE = "type";
     public static final String USER_NAME = "name";

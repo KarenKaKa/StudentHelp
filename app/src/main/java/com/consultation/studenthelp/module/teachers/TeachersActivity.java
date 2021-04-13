@@ -8,11 +8,15 @@ import androidx.databinding.DataBindingUtil;
 import com.consultation.studenthelp.R;
 import com.consultation.studenthelp.base.BaseActivity;
 import com.consultation.studenthelp.databinding.ActivityTeachersBinding;
+import com.consultation.studenthelp.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.leancloud.AVObject;
+import cn.leancloud.im.v2.AVIMClient;
+import cn.leancloud.im.v2.AVIMException;
+import cn.leancloud.im.v2.callback.AVIMClientCallback;
 
 /**
  * 咨询师列表
