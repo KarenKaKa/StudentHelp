@@ -1,12 +1,20 @@
 package com.consultation.studenthelp.module.login;
 
+import android.content.Intent;
 import android.text.TextUtils;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.consultation.studenthelp.base.BasePresenter;
 import com.consultation.studenthelp.net.vo.UserInfo;
+import com.consultation.studenthelp.utils.Constants;
 import com.consultation.studenthelp.utils.UserSpUtils;
 
 import cn.leancloud.AVUser;
+import cn.leancloud.chatkit.LCChatKit;
+import cn.leancloud.im.v2.AVIMClient;
+import cn.leancloud.im.v2.AVIMException;
+import cn.leancloud.im.v2.callback.AVIMClientCallback;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
@@ -33,6 +41,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> {
                 UserSpUtils.setIsLogin(true);
                 UserSpUtils.setUserType(userType);
                 UserSpUtils.setUserName(userName);
+                UserSpUtils.setUerId(user.getObjectId());
                 mRootView.loginSuccess();
             }
 
@@ -67,6 +76,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> {
                 UserSpUtils.setIsLogin(true);
                 UserSpUtils.setUserType(userType);
                 UserSpUtils.setUserName(userName);
+                UserSpUtils.setUerId(user.getObjectId());
                 mRootView.loginSuccess();
             }
 

@@ -3,6 +3,7 @@ package com.consultation.studenthelp.module.teachers;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,29 +81,20 @@ public class TeachersAdapter extends RecyclerView.Adapter<TeachersAdapter.Teache
             @Override
             public void onClick(View v) {
                 if (bean.getBoolean(UserInfo.USER_AVAILABLE)) {
-                    // TODO: 2021/4/13 删除
-                    AVIMClient client = AVIMClient.getInstance(Constants.TEST_KEY1);
-                    client.open(new AVIMClientCallback() {
+                    LCChatKit.getInstance().open(LCChatKit.getInstance().getCurrentUserId(), new AVIMClientCallback() {
                         @Override
                         public void done(AVIMClient client, AVIMException e) {
-//                        StudentApp.getInstance().client = client;
-                            LCChatKit.getInstance().open(Constants.TEST_KEY1, new AVIMClientCallback() {
-                                @Override
-                                public void done(AVIMClient client, AVIMException e) {
-                                    if (null == e) {
-                                        Intent intent = new Intent(mContext, LCIMConversationActivity.class);
-                                        intent.putExtra(LCIMConstants.PEER_ID, Constants.TEST_KEY2);
-                                        mContext.startActivity(intent);
-                                    } else {
-                                        Toast.makeText(mContext, e.toString(), Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
+                            if (null == e) {
+                                Intent intent = new Intent(mContext, LCIMConversationActivity.class);
+                                intent.putExtra(LCIMConstants.PEER_ID, bean.getObjectId());
+                                mContext.startActivity(intent);
+                            } else {
+                                Toast.makeText(mContext, e.toString(), Toast.LENGTH_SHORT).show();
+                            }
                         }
                     });
-
-                }else {
-
+                } else {
+                    Toast.makeText(mContext,"留言",Toast.LENGTH_SHORT).show();
                 }
             }
         });
