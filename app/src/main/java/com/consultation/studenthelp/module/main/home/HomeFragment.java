@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import com.consultation.studenthelp.R;
 import com.consultation.studenthelp.base.BaseFragment;
 import com.consultation.studenthelp.databinding.FragmentHomeBinding;
+import com.consultation.studenthelp.module.main.news.NewsAdapter;
 import com.consultation.studenthelp.module.teachers.TeachersActivity;
 import com.consultation.studenthelp.net.vo.NewsBean;
 import com.consultation.studenthelp.net.vo.UserBean;
@@ -57,8 +58,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                         , new UserBean("王雪松", "国际二级心理咨询师"), new UserBean("孙雅苑", "北大心理硕士"))));
 
 
-        binding.recyclerNews.setAdapter(new HomeNewsAdapter(getContext(),
-                List.of(new NewsBean("", ""), new NewsBean("", ""), new NewsBean("", ""), new NewsBean("", ""), new NewsBean("", ""), new NewsBean("", ""), new NewsBean("", ""), new NewsBean("", ""), new NewsBean("", ""))));
+//        binding.recyclerNews.setAdapter(new NewsAdapter(getContext(),
+//                List.of(new NewsBean("", ""), new NewsBean("", ""), new NewsBean("", ""), new NewsBean("", ""), new NewsBean("", ""), new NewsBean("", ""), new NewsBean("", ""), new NewsBean("", ""), new NewsBean("", ""))));
     }
 
     @Override
