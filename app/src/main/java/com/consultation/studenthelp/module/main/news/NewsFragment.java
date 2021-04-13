@@ -71,6 +71,7 @@ public class NewsFragment extends BaseFragment {
             public void onComplete() {
             }
         });
+
     }
 
     private void showData(List<AVObject> result) {

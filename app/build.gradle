@@ -72,7 +72,7 @@ dependencies {
 
     implementation 'cn.leancloud:storage-android:7.2.3'
     implementation 'com.youth.banner:banner:2.0.10'
-    implementation project(":leancloudchatkit")
+    implementation project(':leancloudchatkit')
     implementation project(path: ':imagepicker')
     implementation project(path: ':ucrop')
     implementation 'com.permissionx.guolindev:permissionx:1.4.0'

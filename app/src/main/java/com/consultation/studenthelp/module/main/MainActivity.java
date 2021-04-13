@@ -1,6 +1,7 @@
 package com.consultation.studenthelp.module.main;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.CompoundButton;
 
 import androidx.annotation.Nullable;
@@ -16,19 +17,29 @@ import com.consultation.studenthelp.module.main.home.HomeFragment;
 import com.consultation.studenthelp.module.main.mine.MineFragment;
 import com.consultation.studenthelp.module.main.news.NewsFragment;
 import com.consultation.studenthelp.utils.Constants;
+import com.consultation.studenthelp.utils.SpUtils;
+import com.consultation.studenthelp.utils.UserSpUtils;
+
+import cn.leancloud.AVUser;
+import cn.leancloud.chatkit.LCChatKit;
+import cn.leancloud.im.v2.AVIMClient;
+import cn.leancloud.im.v2.AVIMException;
+import cn.leancloud.im.v2.callback.AVIMClientCallback;
 
 public class MainActivity extends BaseActivity {
     private ActivityMainBinding binding;
     private Long timeBackPress = 0l;
     private Fragment currFragment;
     private FragmentTransaction fragmentTransaction;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        String userId = UserSpUtils.getUserId();
+        if (!userId.isEmpty()){
+            initIm(UserSpUtils.getUserId());
+        }
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         binding.setLifecycleOwner(this);
-
         binding.rbHome.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -86,7 +97,13 @@ public class MainActivity extends BaseActivity {
         }
         fragmentTransaction.commitNowAllowingStateLoss();
     }
-
+    private void initIm(String userId) {
+        LCChatKit.getInstance().open(userId, new AVIMClientCallback() {
+            @Override
+            public void done(AVIMClient avimClient, AVIMException e) {
+            }
+        });
+    }
     @Override
     public void onBackPressed() {
         if (timeBackPress + 2000 > System.currentTimeMillis()) {

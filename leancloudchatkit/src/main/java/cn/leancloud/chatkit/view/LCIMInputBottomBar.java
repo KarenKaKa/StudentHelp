@@ -215,8 +215,8 @@ public class LCIMInputBottomBar extends LinearLayout {
   private void showTextLayout() {
     contentEditText.setVisibility(View.VISIBLE);
     recordBtn.setVisibility(View.GONE);
-    voiceBtn.setVisibility(contentEditText.getText().length() > 0 ? GONE : VISIBLE);
-    sendTextBtn.setVisibility(contentEditText.getText().length() > 0 ? VISIBLE : GONE);
+    voiceBtn.setVisibility(GONE);
+    sendTextBtn.setVisibility(VISIBLE);
     keyboardBtn.setVisibility(View.GONE);
     moreLayout.setVisibility(View.GONE);
     contentEditText.requestFocus();
@@ -230,7 +230,7 @@ public class LCIMInputBottomBar extends LinearLayout {
     contentEditText.setVisibility(View.GONE);
     recordBtn.setVisibility(View.VISIBLE);
     voiceBtn.setVisibility(GONE);
-    keyboardBtn.setVisibility(VISIBLE);
+    keyboardBtn.setVisibility(GONE);
     moreLayout.setVisibility(View.GONE);
     LCIMSoftInputUtils.hideSoftInput(getContext(), contentEditText);
   }
@@ -247,8 +247,8 @@ public class LCIMInputBottomBar extends LinearLayout {
       @Override
       public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
         boolean showSend = charSequence.length() > 0;
-        keyboardBtn.setVisibility(!showSend ? View.VISIBLE : GONE);
-        sendTextBtn.setVisibility(showSend ? View.VISIBLE : GONE);
+        keyboardBtn.setVisibility(GONE);
+        sendTextBtn.setVisibility(VISIBLE);
         voiceBtn.setVisibility(View.GONE);
       }
 
