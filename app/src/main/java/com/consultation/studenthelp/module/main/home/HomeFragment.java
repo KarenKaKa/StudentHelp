@@ -13,16 +13,19 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import com.consultation.studenthelp.R;
 import com.consultation.studenthelp.base.BaseFragment;
 import com.consultation.studenthelp.databinding.FragmentHomeBinding;
-import com.consultation.studenthelp.module.main.news.NewsAdapter;
 import com.consultation.studenthelp.module.teachers.TeachersActivity;
-import com.consultation.studenthelp.net.vo.NewsBean;
 import com.consultation.studenthelp.net.vo.UserBean;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class HomeFragment extends BaseFragment implements View.OnClickListener {
+import cn.leancloud.AVObject;
+
+public class HomeFragment extends BaseFragment<HomePresenter> implements HomeView, View.OnClickListener {
     private FragmentHomeBinding binding;
     private HomeTeacherAdapter teacherAdapter;
+    private HomeSortAdapter sortAdapter;
+    private List<AVObject> sortList = new ArrayList<>();
 
     public static HomeFragment newInstance() {
         HomeFragment fragment = new HomeFragment();
@@ -45,6 +48,12 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     }
 
     @Override
+    protected HomePresenter createPresenter() {
+        return new HomePresenter(this);
+    }
+
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         binding.banner.addBannerLifecycleObserver(this)
@@ -60,6 +69,13 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
 //        binding.recyclerNews.setAdapter(new NewsAdapter(getContext(),
 //                List.of(new NewsBean("", ""), new NewsBean("", ""), new NewsBean("", ""), new NewsBean("", ""), new NewsBean("", ""), new NewsBean("", ""), new NewsBean("", ""), new NewsBean("", ""), new NewsBean("", ""))));
+
+        GridLayoutManager sortManager = new GridLayoutManager(getContext(), 4);
+        binding.recyclerSort.setLayoutManager(sortManager);
+        sortAdapter = new HomeSortAdapter(getContext(), sortList);
+        binding.recyclerSort.setAdapter(sortAdapter);
+
+        mPresenter.getSorts();
     }
 
     @Override
@@ -68,5 +84,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         if (id == R.id.tvConsults) {
             startActivity(new Intent(getActivity(), TeachersActivity.class));
         }
+    }
+
+    @Override
+    public void setSortData(List<AVObject> labels) {
+        sortList.addAll(labels);
+        sortAdapter.notifyDataSetChanged();
     }
 }

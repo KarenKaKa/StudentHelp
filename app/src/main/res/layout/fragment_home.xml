@@ -63,109 +63,11 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/tvConsults" />
 
-            <TextView
-                android:id="@+id/tvSort1"
-                android:layout_width="wrap_content"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerSort"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableTop="@drawable/icon_qingxu"
-                android:drawablePadding="8dp"
-                android:paddingVertical="5dp"
-                android:text="个人成长"
-                android:textSize="14sp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@+id/tvSort2"
                 app:layout_constraintTop_toBottomOf="@+id/tvConsults" />
-
-            <TextView
-                android:id="@+id/tvSort2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableTop="@drawable/icon_qingxu"
-                android:drawablePadding="8dp"
-                android:paddingVertical="5dp"
-                android:text="情绪管理"
-                android:textSize="14sp"
-                app:layout_constraintLeft_toRightOf="@+id/tvSort1"
-                app:layout_constraintRight_toLeftOf="@+id/tvSort3"
-                app:layout_constraintTop_toTopOf="@+id/tvSort1" />
-
-            <TextView
-                android:id="@+id/tvSort3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableTop="@drawable/icon_qingxu"
-                android:drawablePadding="8dp"
-                android:paddingVertical="5dp"
-                android:text="人际交往"
-                android:textSize="14sp"
-                app:layout_constraintLeft_toRightOf="@+id/tvSort2"
-                app:layout_constraintRight_toLeftOf="@+id/tvSort4"
-                app:layout_constraintTop_toTopOf="@+id/tvSort1" />
-
-            <TextView
-                android:id="@+id/tvSort4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableTop="@drawable/icon_qingxu"
-                android:drawablePadding="8dp"
-                android:paddingVertical="5dp"
-                android:text="职业发展"
-                android:textSize="14sp"
-                app:layout_constraintLeft_toRightOf="@+id/tvSort3"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/tvSort1" />
-
-            <TextView
-                android:id="@+id/tvSort5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableTop="@drawable/icon_qingxu"
-                android:drawablePadding="8dp"
-                android:paddingVertical="5dp"
-                android:text="抑郁情绪"
-                android:textSize="14sp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@+id/tvSort6"
-                app:layout_constraintTop_toBottomOf="@+id/tvSort1" />
-
-            <TextView
-                android:id="@+id/tvSort6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableTop="@drawable/icon_qingxu"
-                android:drawablePadding="8dp"
-                android:paddingVertical="5dp"
-                android:text="恋爱心理"
-                android:textSize="14sp"
-                app:layout_constraintLeft_toRightOf="@+id/tvSort5"
-                app:layout_constraintRight_toLeftOf="@+id/tvSort7"
-                app:layout_constraintTop_toTopOf="@+id/tvSort5" />
-
-            <TextView
-                android:id="@+id/tvSort7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableTop="@drawable/icon_qingxu"
-                android:drawablePadding="8dp"
-                android:paddingVertical="5dp"
-                android:text="心理健康"
-                android:textSize="14sp"
-                app:layout_constraintLeft_toRightOf="@+id/tvSort6"
-                app:layout_constraintRight_toLeftOf="@+id/tvSort8"
-                app:layout_constraintTop_toTopOf="@+id/tvSort5" />
-
-            <TextView
-                android:id="@+id/tvSort8"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableTop="@drawable/icon_qingxu"
-                android:drawablePadding="8dp"
-                android:paddingVertical="5dp"
-                android:text="家庭关系"
-                android:textSize="14sp"
-                app:layout_constraintLeft_toRightOf="@+id/tvSort7"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/tvSort5" />
 
             <View
                 android:layout_width="50dp"
@@ -186,7 +88,7 @@
                 android:textStyle="bold"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvSort5"
+                app:layout_constraintTop_toBottomOf="@+id/recyclerSort"
                 app:layout_goneMarginTop="15dp" />
 
             <View

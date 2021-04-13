@@ -60,15 +60,6 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         return new LoginPresenter(this);
     }
 
-
-    @Override
-    public void showLoading() {
-    }
-
-    @Override
-    public void hideLoading() {
-    }
-
     @Override
     public void onClick(View view) {
         int id = view.getId();

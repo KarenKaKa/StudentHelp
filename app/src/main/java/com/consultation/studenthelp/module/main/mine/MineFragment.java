@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil;
 
 import com.consultation.studenthelp.R;
 import com.consultation.studenthelp.base.BaseFragment;
+import com.consultation.studenthelp.base.BasePresenter;
 import com.consultation.studenthelp.databinding.FragmentMineBinding;
 import com.consultation.studenthelp.module.login.LoginActivity;
 import com.consultation.studenthelp.utils.UserSpUtils;
@@ -43,6 +44,11 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
         binding.tvLogout.setOnClickListener(this);
         binding.tvTeachers.setOnClickListener(this);
         binding.tvTests.setOnClickListener(this);
+    }
+
+    @Override
+    protected BasePresenter createPresenter() {
+        return null;
     }
 
 
