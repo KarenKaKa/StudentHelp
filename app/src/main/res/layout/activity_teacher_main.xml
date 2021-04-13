@@ -37,6 +37,35 @@
             app:layout_constraintTop_toTopOf="@+id/ivHead" />
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:text="是否空闲"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            app:layout_constraintLeft_toLeftOf="@+id/switch_btn"
+            app:layout_constraintRight_toRightOf="@+id/switch_btn"
+            app:layout_constraintTop_toBottomOf="@+id/switch_btn" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switch_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:checked="true"
+            android:longClickable="false"
+            android:textColor="@color/white"
+            android:textOff="Off"
+            android:textOn="On"
+            app:layout_constraintBottom_toBottomOf="@+id/vTop"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/vTop"
+            app:showText="true"
+            app:switchPadding="5dp"
+            app:switchTextAppearance="@style/SwitchCompat.Text"
+            app:theme="@style/SwitchCompat.Control" />
+
+        <TextView
             android:id="@+id/tvConsults"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

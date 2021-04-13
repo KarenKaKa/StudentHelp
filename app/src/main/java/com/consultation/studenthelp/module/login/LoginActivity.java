@@ -2,7 +2,6 @@ package com.consultation.studenthelp.module.login;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.RadioGroup;
 
@@ -14,12 +13,6 @@ import com.consultation.studenthelp.databinding.ActivityLoginBinding;
 import com.consultation.studenthelp.module.main.MainActivity;
 import com.consultation.studenthelp.module.teacher.TeacherMainActivity;
 import com.consultation.studenthelp.utils.UserSpUtils;
-
-import cn.leancloud.sms.AVSMS;
-import cn.leancloud.sms.AVSMSOption;
-import cn.leancloud.types.AVNull;
-import io.reactivex.Observer;
-import io.reactivex.disposables.Disposable;
 
 public class LoginActivity extends BaseActivity<LoginPresenter> implements LoginContract.View, View.OnClickListener {
     private String userType = "1";
@@ -40,6 +33,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         binding.tvGetCode.setOnClickListener(this);
         binding.btnSubmit.setOnClickListener(this);
 
+        binding.etInput.setText(UserSpUtils.getUserName());
         if (UserSpUtils.getUserType().equals("1")) {
             binding.rbStudent.setChecked(true);
             userType = "1";
@@ -79,93 +73,23 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         if (id == R.id.ivBack) {
             onBackPressed();
         } else if (id == R.id.tvGetCode) {
-            getCode();
+            mPresenter.getCode(binding.etInput.getText().toString().trim());
         } else if (id == R.id.btnSubmit) {
             String userName = binding.etInput.getText().toString().trim();
             String code = binding.etInvitateCode.getText().toString().trim();
-            if (TextUtils.isEmpty(userName)) {
-                toast("请输入手机号");
-                return;
-            }
-            if (TextUtils.isEmpty(code)) {
-                toast("请输入验证码");
-                return;
-            }
-            AVSMS.verifySMSCodeInBackground(code, userName).subscribe(new Observer<AVNull>() {
-                @Override
-                public void onSubscribe(Disposable d) {
-                }
-
-                @Override
-                public void onNext(AVNull avNull) {
-                    UserSpUtils.setIsLogin(true);
-                    UserSpUtils.setUserType(userType);
-                    UserSpUtils.setUserName(userName);
-                    if (userType.equals("1")) {
-                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                    } else {
-                        startActivity(new Intent(LoginActivity.this, TeacherMainActivity.class));
-                    }
-                    finish();
-                }
-
-                @Override
-                public void onError(Throwable throwable) {
-                    toast(throwable.getMessage());
-                    //TODO 审核通过之后删除
-                    UserSpUtils.setIsLogin(true);
-                    UserSpUtils.setUserType(userType);
-                    UserSpUtils.setUserName(userName);
-                    if (userType.equals("1")) {
-                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                    } else {
-                        startActivity(new Intent(LoginActivity.this, TeacherMainActivity.class));
-                    }
-                    finish();
-                }
-
-                @Override
-                public void onComplete() {
-                }
-            });
+            //TODO 测试环境 验证码写死
+            mPresenter.verifySMSCode(userName, "323215", userType);
         }
-    }
-
-    private void getCode() {
-        String userName = binding.etInput.getText().toString().trim();
-        if (TextUtils.isEmpty(userName)) {
-            toast("请输入手机号");
-            return;
-        }
-
-        AVSMSOption option = new AVSMSOption();
-        option.setTtl(6);
-        option.setApplicationName("大学生心理咨询");
-        option.setOperation("登录注册");
-        AVSMS.requestSMSCodeInBackground(userName, option).subscribe(new Observer<AVNull>() {
-            @Override
-            public void onSubscribe(Disposable disposable) {
-            }
-
-            @Override
-            public void onNext(AVNull avNull) {
-                toast("短信发送成功");
-            }
-
-            @Override
-            public void onError(Throwable throwable) {
-                toast("短信发送失败：" + throwable.getMessage());
-            }
-
-            @Override
-            public void onComplete() {
-            }
-        });
     }
 
 
     @Override
     public void loginSuccess() {
-        startActivity(new Intent(this, MainActivity.class));
+        if (userType.equals("1")) {
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        } else {
+            startActivity(new Intent(LoginActivity.this, TeacherMainActivity.class));
+        }
+        finish();
     }
 }
