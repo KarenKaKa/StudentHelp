@@ -89,16 +89,16 @@ public class NewsDetailActivity extends BaseActivity {
     }
 
     private void showData(AVObject details) {
-        String teacherName = details.getString(ArticlesInfo.NEWS_TEACHER_NAME);
-        binding.name.setText(teacherName);
+        String teacherId = details.getString(ArticlesInfo.NEWS_TEACHER_ID);
         AVQuery query = AVUser.getQuery();
-        query.whereEqualTo(UserInfo.USER_NAME, teacherName);
+        query.whereEqualTo(UserInfo.OBJECT_ID, teacherId);
         query.findInBackground().compose(RxSchedulers.Schedulers()).subscribe(new Observer<List<AVUser>>() {
             public void onSubscribe(Disposable disposable) {
             }
 
             public void onNext(List<AVUser> result) {
                 if (!result.isEmpty()) {
+                    binding.name.setText(result.get(0).getString(UserInfo.USER_NAME));
                     binding.skills.setText(result.get(0).getString(UserInfo.USER_SKILLS));
                 }
             }

@@ -1,2 +1,2 @@
-include ':app', ':leancloudchatkit'
+include ':app', ':leancloudchatkit', ':imagepicker', ':ucrop'
 rootProject.name = "StudentHelp"

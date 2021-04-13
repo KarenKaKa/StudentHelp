@@ -8,4 +8,5 @@ public class ArticlesInfo extends BaseTableInfo {
     public static final String NEWS_TITLE = "title";
     public static final String NEWS_CONTENT = "content";
     public static final String NEWS_TEACHER_NAME = "teacherName";
+    public static final String NEWS_TEACHER_ID = "teacherId";
 }
