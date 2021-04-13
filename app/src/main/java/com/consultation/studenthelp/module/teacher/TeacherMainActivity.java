@@ -28,6 +28,8 @@ public class TeacherMainActivity extends BaseActivity implements View.OnClickLis
         binding.tvAppointment.setOnClickListener(this);
         binding.tvLogout.setOnClickListener(this);
         binding.tvTests.setOnClickListener(this);
+
+        binding.name.setText(UserSpUtils.getUserName());
     }
 
     @Override

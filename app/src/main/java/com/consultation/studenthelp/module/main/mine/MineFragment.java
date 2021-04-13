@@ -44,6 +44,8 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
         binding.tvLogout.setOnClickListener(this);
         binding.tvTeachers.setOnClickListener(this);
         binding.tvTests.setOnClickListener(this);
+
+        binding.name.setText(UserSpUtils.getUserName());
     }
 
     @Override
