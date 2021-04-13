@@ -1,5 +1,7 @@
 package com.consultation.studenthelp.utils;
 
+import cn.leancloud.AVUser;
+
 public class UserSpUtils {
     private static final String IS_LOGIN = "is_login";
     private static final String USER_NAME = "user_name";
@@ -31,7 +33,7 @@ public class UserSpUtils {
 
     public static void logout() {
         SpUtils.remove(IS_LOGIN);
-        SpUtils.remove(USER_NAME);
+        AVUser.logOut();
     }
 
 }
