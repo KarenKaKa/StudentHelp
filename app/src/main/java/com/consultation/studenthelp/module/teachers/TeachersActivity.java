@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.leancloud.AVObject;
+import cn.leancloud.AVUser;
 
 /**
  * 咨询师列表
@@ -56,7 +57,7 @@ public class TeachersActivity extends BaseActivity<TeachersPresenter> implements
     }
 
     @Override
-    public void setData(List<AVObject> students) {
+    public void setData(List<AVUser> students) {
         teachers.addAll(students);
         adapter.notifyDataSetChanged();
     }

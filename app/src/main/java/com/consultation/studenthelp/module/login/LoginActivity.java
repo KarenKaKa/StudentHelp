@@ -17,6 +17,7 @@ import com.consultation.studenthelp.utils.UserSpUtils;
 public class LoginActivity extends BaseActivity<LoginPresenter> implements LoginContract.View, View.OnClickListener {
     private String userType = "1";
     private ActivityLoginBinding binding;
+    private boolean isLogin = true;//是否为登录页面  否则为注册
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +31,8 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     private void initView() {
         binding.ivBack.setOnClickListener(this);
         binding.etInvitateCode.setOnClickListener(this);
-        binding.tvGetCode.setOnClickListener(this);
+        binding.tvForget.setOnClickListener(this);
+        binding.tvRegister.setOnClickListener(this);
         binding.btnSubmit.setOnClickListener(this);
 
         binding.etInput.setText(UserSpUtils.getUserName());
@@ -72,13 +74,30 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         int id = view.getId();
         if (id == R.id.ivBack) {
             onBackPressed();
-        } else if (id == R.id.tvGetCode) {
-            mPresenter.getCode(binding.etInput.getText().toString().trim());
         } else if (id == R.id.btnSubmit) {
             String userName = binding.etInput.getText().toString().trim();
             String code = binding.etInvitateCode.getText().toString().trim();
-            //TODO 测试环境 验证码写死
-            mPresenter.verifySMSCode(userName, "323215", userType);
+            if (isLogin) {
+                mPresenter.login(userName, code, userType);
+            } else {
+                mPresenter.register(userName, code, userType);
+            }
+        } else if (id == R.id.tvForget) {
+            toast("请联系管理员修改");
+        } else if (id == R.id.tvRegister) {
+            if (isLogin) {
+                isLogin = false;
+                binding.tvTitle.setText("注册");
+                binding.btnSubmit.setText("注册");
+                binding.tvForget.setVisibility(View.INVISIBLE);
+                binding.tvRegister.setText("已有账号，登录");
+            } else {
+                isLogin = true;
+                binding.tvTitle.setText("登录");
+                binding.btnSubmit.setText("登录");
+                binding.tvForget.setVisibility(View.VISIBLE);
+                binding.tvRegister.setText("注册");
+            }
         }
     }
 
