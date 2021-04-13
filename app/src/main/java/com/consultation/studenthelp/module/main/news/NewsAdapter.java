@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.consultation.studenthelp.R;
-import com.consultation.studenthelp.net.vo.NewsBean;
+import com.consultation.studenthelp.net.vo.ArticlesInfo;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -21,6 +21,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.HomeTeacherVie
     private Context mContext;
     private List<AVObject> list;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
     public NewsAdapter(Context mContext, List<AVObject> list) {
         this.mContext = mContext;
         this.list = list;
@@ -35,10 +36,10 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.HomeTeacherVie
     @Override
     public void onBindViewHolder(@NonNull HomeTeacherViewHolder holder, int position) {
         AVObject bean = list.get(position);
-        holder.title.setText(bean.getString("title"));
-        holder.content.setText(bean.getString("content"));
-        holder.teacher.setText(bean.getString("teacherName"));
-        holder.date.setText(dateFormat.format(bean.getDate("updatedAt")));
+        holder.title.setText(bean.getString(ArticlesInfo.LABEL_TITLE));
+        holder.content.setText(bean.getString(ArticlesInfo.LABEL_CONTENT));
+        holder.teacher.setText(bean.getString(ArticlesInfo.LABEL_TEACHER_NAME));
+        holder.date.setText(dateFormat.format(bean.getUpdatedAt()));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

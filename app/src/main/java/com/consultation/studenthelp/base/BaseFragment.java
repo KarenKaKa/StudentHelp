@@ -12,16 +12,18 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableObserver;
 
 
-public class BaseFragment extends Fragment {
+public abstract class BaseFragment<P extends BasePresenter> extends Fragment {
     public Activity mActivity;
-
+    protected P mPresenter;
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mActivity = getActivity();
+        mPresenter = createPresenter();
     }
 
+    protected abstract P createPresenter();
 
     public void toast(int resId) {
         Toast.makeText(mActivity, resId, Toast.LENGTH_SHORT).show();
@@ -36,6 +38,9 @@ public class BaseFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         onUnsubscribe();
+        if (mPresenter != null) {
+            mPresenter.detachView();
+        }
     }
 
     private CompositeDisposable mCompositeDisposable;

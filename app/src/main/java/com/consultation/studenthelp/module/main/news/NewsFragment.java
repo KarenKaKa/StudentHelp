@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.consultation.studenthelp.R;
 import com.consultation.studenthelp.base.BaseFragment;
+import com.consultation.studenthelp.base.BasePresenter;
 import com.consultation.studenthelp.net.RxSchedulers;
 
 import java.util.ArrayList;
@@ -43,6 +44,11 @@ public class NewsFragment extends BaseFragment {
         recyclerNews = view.findViewById(R.id.recyclerNews);
         recyclerNews.setAdapter(new NewsAdapter(getContext(), dataList));
 
+    }
+
+    @Override
+    protected BasePresenter createPresenter() {
+        return null;
     }
 
     private void getData() {

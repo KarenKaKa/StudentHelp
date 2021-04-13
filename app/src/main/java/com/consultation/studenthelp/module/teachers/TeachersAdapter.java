@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.consultation.studenthelp.R;
+import com.consultation.studenthelp.net.vo.LabelsInfo;
 import com.consultation.studenthelp.net.vo.UserInfo;
 import com.consultation.studenthelp.utils.Constants;
 
@@ -33,12 +34,25 @@ public class TeachersAdapter extends RecyclerView.Adapter<TeachersAdapter.Teache
 
     private Context mContext;
     private List<AVObject> list;
+    private List<AVObject> labels;
 
     public TeachersAdapter(Context mContext, List<AVObject> list) {
         this.mContext = mContext;
         this.list = list;
     }
 
+    public void refreshLabels(List<AVObject> labels) {
+        this.labels = labels;
+    }
+
+    private String getLabelsName(String id) {
+        for (AVObject label : labels) {
+            if (id.equals(label.getObjectId())) {
+                return label.getString(LabelsInfo.LABEL_NAME);
+            }
+        }
+        return null;
+    }
 
     @NonNull
     @Override
@@ -62,16 +76,25 @@ public class TeachersAdapter extends RecyclerView.Adapter<TeachersAdapter.Teache
         } else {
             String[] label = labels.split(",");
             if (label.length >= 1) {
-                holder.label1.setVisibility(View.VISIBLE);
-                holder.label1.setText(label[0]);
+                String name = getLabelsName(label[0]);
+                if (!TextUtils.isEmpty(name)) {
+                    holder.label1.setVisibility(View.VISIBLE);
+                    holder.label1.setText(name);
+                }
             }
             if (label.length >= 2) {
-                holder.label2.setVisibility(View.VISIBLE);
-                holder.label2.setText(label[1]);
+                String name = getLabelsName(label[1]);
+                if (!TextUtils.isEmpty(name)) {
+                    holder.label2.setVisibility(View.VISIBLE);
+                    holder.label2.setText(name);
+                }
             }
             if (label.length >= 3) {
-                holder.label3.setVisibility(View.VISIBLE);
-                holder.label3.setText(label[2]);
+                String name = getLabelsName(label[2]);
+                if (!TextUtils.isEmpty(name)) {
+                    holder.label3.setVisibility(View.VISIBLE);
+                    holder.label3.setText(name);
+                }
             }
         }
 
