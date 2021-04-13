@@ -57,8 +57,9 @@ public class TeachersActivity extends BaseActivity<TeachersPresenter> implements
     }
 
     @Override
-    public void setData(List<AVUser> students) {
+    public void setData(List<AVUser> students, List<AVObject> labels) {
         teachers.addAll(students);
+        adapter.refreshLabels(labels);
         adapter.notifyDataSetChanged();
     }
 }
