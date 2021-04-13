@@ -80,6 +80,19 @@
             app:layout_constraintTop_toBottomOf="@+id/vTop" />
 
         <TextView
+            android:id="@+id/tvMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/icon_consult"
+            android:drawableRight="@drawable/icon_arrow_right"
+            android:drawablePadding="10dp"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="20dp"
+            android:text="留言列表"
+            android:textColor="#333"
+            app:layout_constraintTop_toBottomOf="@+id/tvConsults" />
+
+        <TextView
             android:id="@+id/tvAppointment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -90,7 +103,7 @@
             android:paddingVertical="20dp"
             android:text="预约申请"
             android:textColor="#333"
-            app:layout_constraintTop_toBottomOf="@+id/tvConsults" />
+            app:layout_constraintTop_toBottomOf="@+id/tvMessage" />
 
         <TextView
             android:id="@+id/tvTests"
@@ -101,9 +114,22 @@
             android:drawablePadding="10dp"
             android:paddingHorizontal="15dp"
             android:paddingVertical="20dp"
-            android:text="发布测试"
+            android:text="发布试题"
             android:textColor="#333"
             app:layout_constraintTop_toBottomOf="@+id/tvAppointment" />
+
+        <TextView
+            android:id="@+id/tvArt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/icon_record"
+            android:drawableRight="@drawable/icon_arrow_right"
+            android:drawablePadding="10dp"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="20dp"
+            android:text="发布文章"
+            android:textColor="#333"
+            app:layout_constraintTop_toBottomOf="@+id/tvTests" />
 
         <TextView
             android:id="@+id/tvLogout"
@@ -116,6 +142,6 @@
             android:paddingVertical="20dp"
             android:text="退出登录"
             android:textColor="#333"
-            app:layout_constraintTop_toBottomOf="@+id/tvTests" />
+            app:layout_constraintTop_toBottomOf="@+id/tvArt" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
