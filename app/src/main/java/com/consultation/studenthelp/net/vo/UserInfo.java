@@ -3,7 +3,7 @@ package com.consultation.studenthelp.net.vo;
 /**
  * 用户表
  */
-public class UserInfo {
+public class UserInfo extends BaseTableInfo {
     public static final String TABLE_NAME = "_User";
     public static final String USER_PHONE = "mobilePhoneVerified";
     public static final String USER_TYPE = "type";
