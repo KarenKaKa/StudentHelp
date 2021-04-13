@@ -16,6 +16,7 @@ import com.consultation.studenthelp.utils.UserSpUtils;
 
 import java.util.Objects;
 
+//TODO 待做个人信息编辑页  性别 昵称
 public class MineFragment extends BaseFragment implements View.OnClickListener {
     private FragmentMineBinding binding;
 

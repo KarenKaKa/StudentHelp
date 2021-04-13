@@ -1,6 +1,7 @@
 package com.consultation.studenthelp.module.teachers;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import java.util.List;
 
 import cn.leancloud.AVObject;
 
+//TODO 待做分类筛选项
 public class TeachersAdapter extends RecyclerView.Adapter<TeachersAdapter.TeacherViewHolder> {
 
     private Context mContext;
@@ -42,22 +44,25 @@ public class TeachersAdapter extends RecyclerView.Adapter<TeachersAdapter.Teache
         holder.gender.setImageResource(bean.getString(UserInfo.USER_GENDER).equals("男") ? R.drawable.icon_man : R.drawable.icon_women);
         holder.name.setText(bean.getString(UserInfo.USER_NAME));
 
-        holder.label1.setVisibility(View.GONE);
-        holder.label2.setVisibility(View.GONE);
-        holder.label3.setVisibility(View.GONE);
         String labels = bean.getString(UserInfo.USER_LABELS);
-        String[] label = labels.split(",");
-        if (label.length >= 1) {
-            holder.label1.setVisibility(View.VISIBLE);
-            holder.label1.setText(label[0]);
-        }
-        if (label.length >= 2) {
-            holder.label2.setVisibility(View.VISIBLE);
-            holder.label2.setText(label[1]);
-        }
-        if (label.length >= 3) {
-            holder.label3.setVisibility(View.VISIBLE);
-            holder.label3.setText(label[2]);
+        if (TextUtils.isEmpty(labels)) {
+            holder.label1.setVisibility(View.GONE);
+            holder.label2.setVisibility(View.GONE);
+            holder.label3.setVisibility(View.GONE);
+        } else {
+            String[] label = labels.split(",");
+            if (label.length >= 1) {
+                holder.label1.setVisibility(View.VISIBLE);
+                holder.label1.setText(label[0]);
+            }
+            if (label.length >= 2) {
+                holder.label2.setVisibility(View.VISIBLE);
+                holder.label2.setText(label[1]);
+            }
+            if (label.length >= 3) {
+                holder.label3.setVisibility(View.VISIBLE);
+                holder.label3.setText(label[2]);
+            }
         }
 
         holder.tvChat.setText(bean.getBoolean(UserInfo.USER_AVAILABLE) ? "咨询" : "留言");

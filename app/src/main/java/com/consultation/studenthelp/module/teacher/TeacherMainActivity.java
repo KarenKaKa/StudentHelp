@@ -13,6 +13,7 @@ import com.consultation.studenthelp.databinding.ActivityTeacherMainBinding;
 import com.consultation.studenthelp.module.login.LoginActivity;
 import com.consultation.studenthelp.utils.UserSpUtils;
 
+//TODO 待做个人信息编辑页  性别 昵称 职称 擅长分类
 public class TeacherMainActivity extends BaseActivity implements View.OnClickListener {
     private ActivityTeacherMainBinding binding;
 
