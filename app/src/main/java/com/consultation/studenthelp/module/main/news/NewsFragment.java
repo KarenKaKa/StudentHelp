@@ -12,6 +12,7 @@ import com.consultation.studenthelp.R;
 import com.consultation.studenthelp.base.BaseFragment;
 import com.consultation.studenthelp.base.BasePresenter;
 import com.consultation.studenthelp.net.RxSchedulers;
+import com.consultation.studenthelp.net.vo.ArticlesInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +53,7 @@ public class NewsFragment extends BaseFragment {
     }
 
     private void getData() {
-        AVQuery<AVObject> query = new AVQuery<>("Articles");
+        AVQuery<AVObject> query = new AVQuery<>(ArticlesInfo.TABLE_NAME);
         query.findInBackground().compose(RxSchedulers.Schedulers()).subscribe(new Observer<List<AVObject>>() {
             public void onSubscribe(Disposable disposable) {
             }

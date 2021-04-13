@@ -1,6 +1,7 @@
 package com.consultation.studenthelp.module.main.news;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,14 +37,16 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.HomeTeacherVie
     @Override
     public void onBindViewHolder(@NonNull HomeTeacherViewHolder holder, int position) {
         AVObject bean = list.get(position);
-        holder.title.setText(bean.getString(ArticlesInfo.LABEL_TITLE));
-        holder.content.setText(bean.getString(ArticlesInfo.LABEL_CONTENT));
-        holder.teacher.setText(bean.getString(ArticlesInfo.LABEL_TEACHER_NAME));
+        holder.title.setText(bean.getString(ArticlesInfo.NEWS_TITLE));
+        holder.content.setText(bean.getString(ArticlesInfo.NEWS_CONTENT));
+        holder.teacher.setText(bean.getString(ArticlesInfo.NEWS_TEACHER_NAME));
         holder.date.setText(dateFormat.format(bean.getUpdatedAt()));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(mContext, NewsDetailActivity.class);
+                intent.putExtra("id", bean.getObjectId());
+                mContext.startActivity(intent);
             }
         });
     }
