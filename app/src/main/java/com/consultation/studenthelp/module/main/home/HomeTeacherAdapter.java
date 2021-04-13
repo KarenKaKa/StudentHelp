@@ -10,15 +10,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.consultation.studenthelp.R;
-import com.consultation.studenthelp.net.vo.UserBean;
+import com.consultation.studenthelp.net.vo.UserInfo;
 
 import java.util.List;
 
+import cn.leancloud.AVUser;
+
 public class HomeTeacherAdapter extends RecyclerView.Adapter<HomeTeacherAdapter.HomeTeacherViewHolder> {
     private Context mContext;
-    private List<UserBean> list;
+    private List<AVUser> list;
 
-    public HomeTeacherAdapter(Context mContext, List<UserBean> list) {
+    public HomeTeacherAdapter(Context mContext, List<AVUser> list) {
         this.mContext = mContext;
         this.list = list;
     }
@@ -31,8 +33,9 @@ public class HomeTeacherAdapter extends RecyclerView.Adapter<HomeTeacherAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull HomeTeacherViewHolder holder, int position) {
-        UserBean bean = list.get(position);
-        holder.name.setText(bean.getName() + "\n" + bean.getSkills());
+        AVUser bean = list.get(position);
+        String skills = bean.getString(UserInfo.USER_SKILLS);
+        holder.name.setText(bean.getString(UserInfo.USER_NAME) + "\n" + bean.getString(UserInfo.USER_SKILLS));
     }
 
     @Override

@@ -59,6 +59,8 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> {
         user.setUsername(userName);
         user.setPassword(code);
         user.put(UserInfo.USER_TYPE, userType);
+        user.put(UserInfo.USER_SKILLS, "");
+        user.put(UserInfo.USER_LABELS, "");
         user.signUpInBackground().subscribe(new Observer<AVUser>() {
             public void onSubscribe(Disposable disposable) {
             }

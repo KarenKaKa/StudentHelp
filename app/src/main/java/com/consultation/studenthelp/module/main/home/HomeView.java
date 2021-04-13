@@ -11,4 +11,8 @@ import cn.leancloud.AVUser;
 public interface HomeView extends BaseView {
 
     void setSortData(List<AVObject> labels);
+
+    void setTeachers(List<AVUser> teachers);
+
+    void setArticlesData(List<AVObject> labels);
 }

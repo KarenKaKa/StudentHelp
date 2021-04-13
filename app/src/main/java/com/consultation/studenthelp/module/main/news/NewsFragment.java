@@ -12,8 +12,6 @@ import com.consultation.studenthelp.R;
 import com.consultation.studenthelp.base.BaseFragment;
 import com.consultation.studenthelp.base.BasePresenter;
 import com.consultation.studenthelp.net.RxSchedulers;
-import com.consultation.studenthelp.net.bean.Artical;
-import com.consultation.studenthelp.net.vo.NewsBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +25,7 @@ public class NewsFragment extends BaseFragment {
 
     private RecyclerView recyclerNews;
     private List<AVObject> dataList = new ArrayList<>();
+
     public static NewsFragment newInstance() {
         NewsFragment fragment = new NewsFragment();
         return fragment;
@@ -43,7 +42,7 @@ public class NewsFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         getData();
         recyclerNews = view.findViewById(R.id.recyclerNews);
-        recyclerNews.setAdapter(new NewsAdapter(getContext(),dataList));
+        recyclerNews.setAdapter(new NewsAdapter(getContext(), dataList));
 
     }
 
@@ -59,13 +58,13 @@ public class NewsFragment extends BaseFragment {
             }
 
             public void onNext(List<AVObject> result) {
-                if (!result.isEmpty()){
-                   showData(result);
+                if (!result.isEmpty()) {
+                    showData(result);
                 }
             }
 
             public void onError(Throwable throwable) {
-                Log.e(this.getClass().getSimpleName(),throwable.toString());
+                Log.e(this.getClass().getSimpleName(), throwable.toString());
             }
 
             public void onComplete() {
@@ -76,6 +75,6 @@ public class NewsFragment extends BaseFragment {
     private void showData(List<AVObject> result) {
         dataList.clear();
         dataList.addAll(result);
-         recyclerNews.getAdapter().notifyDataSetChanged();
+        recyclerNews.getAdapter().notifyDataSetChanged();
     }
 }
