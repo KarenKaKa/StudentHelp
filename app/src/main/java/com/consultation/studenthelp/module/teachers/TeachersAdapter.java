@@ -3,7 +3,6 @@ package com.consultation.studenthelp.module.teachers;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +16,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.consultation.studenthelp.R;
 import com.consultation.studenthelp.net.vo.LabelsInfo;
 import com.consultation.studenthelp.net.vo.UserInfo;
-import com.consultation.studenthelp.utils.Constants;
 
 import java.util.List;
 
 import cn.leancloud.AVObject;
+import cn.leancloud.AVUser;
 import cn.leancloud.chatkit.LCChatKit;
 import cn.leancloud.chatkit.activity.LCIMConversationActivity;
 import cn.leancloud.chatkit.utils.LCIMConstants;
@@ -33,16 +32,18 @@ import cn.leancloud.im.v2.callback.AVIMClientCallback;
 public class TeachersAdapter extends RecyclerView.Adapter<TeachersAdapter.TeacherViewHolder> {
 
     private Context mContext;
-    private List<AVObject> list;
+    private List<AVUser> list;
     private List<AVObject> labels;
+    private boolean fromOrder;
 
-    public TeachersAdapter(Context mContext, List<AVObject> list) {
+    public TeachersAdapter(Context mContext, List<AVUser> list) {
         this.mContext = mContext;
         this.list = list;
     }
 
-    public void refreshLabels(List<AVObject> labels) {
+    public void refreshLabels(List<AVObject> labels, boolean fromOrder) {
         this.labels = labels;
+        this.fromOrder = fromOrder;
     }
 
     private String getLabelsName(String id) {
@@ -62,7 +63,7 @@ public class TeachersAdapter extends RecyclerView.Adapter<TeachersAdapter.Teache
 
     @Override
     public void onBindViewHolder(@NonNull TeacherViewHolder holder, int position) {
-        AVObject bean = list.get(position);
+        AVUser bean = list.get(position);
         holder.name.setText(bean.getString(UserInfo.USER_NAME));
         holder.skills.setText(bean.getString(UserInfo.USER_SKILLS));
         holder.gender.setImageResource(bean.getString(UserInfo.USER_GENDER).equals("男") ? R.drawable.icon_man : R.drawable.icon_women);
@@ -98,12 +99,17 @@ public class TeachersAdapter extends RecyclerView.Adapter<TeachersAdapter.Teache
             }
         }
 
-        holder.tvChat.setText(bean.getBoolean(UserInfo.USER_AVAILABLE) ? "咨询" : "留言");
-        holder.tvChat.setBackgroundResource(bean.getBoolean(UserInfo.USER_AVAILABLE) ? R.drawable.shape_solid_deb887_15 : R.drawable.shape_solid_a4d3ee_15);
+        holder.tvChat.setText(fromOrder ? "预约" : bean.getBoolean(UserInfo.USER_AVAILABLE) ? "咨询" : "留言");
+        holder.tvChat.setBackgroundResource(fromOrder || bean.getBoolean(UserInfo.USER_AVAILABLE) ? R.drawable.shape_solid_deb887_15 : R.drawable.shape_solid_a4d3ee_15);
         holder.tvChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (bean.getBoolean(UserInfo.USER_AVAILABLE)) {
+                if (fromOrder) {
+                    Intent intent = new Intent(mContext, OrderActivity.class);
+                    intent.putExtra(UserInfo.USER_NAME, bean.getString(UserInfo.USER_NAME));
+                    intent.putExtra(UserInfo.OBJECT_ID, bean.getObjectId());
+                    mContext.startActivity(intent);
+                } else if (bean.getBoolean(UserInfo.USER_AVAILABLE)) {
                     LCChatKit.getInstance().open(LCChatKit.getInstance().getCurrentUserId(), new AVIMClientCallback() {
                         @Override
                         public void done(AVIMClient client, AVIMException e) {
@@ -117,7 +123,7 @@ public class TeachersAdapter extends RecyclerView.Adapter<TeachersAdapter.Teache
                         }
                     });
                 } else {
-                    Toast.makeText(mContext,"留言",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "留言", Toast.LENGTH_SHORT).show();
                 }
             }
         });
