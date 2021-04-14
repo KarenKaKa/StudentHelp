@@ -2,6 +2,7 @@ package com.consultation.studenthelp.module;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,6 +12,12 @@ import com.consultation.studenthelp.module.main.MainActivity;
 import com.consultation.studenthelp.module.teacher.TeacherMainActivity;
 import com.consultation.studenthelp.utils.UserSpUtils;
 
+import cn.leancloud.AVUser;
+import cn.leancloud.chatkit.LCChatKit;
+import cn.leancloud.im.v2.AVIMClient;
+import cn.leancloud.im.v2.AVIMException;
+import cn.leancloud.im.v2.callback.AVIMClientCallback;
+
 public class SplashActivity extends AppCompatActivity {
 
     @Override
@@ -18,6 +25,7 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         if (UserSpUtils.isLogin()) {
+            initIm();
             if (UserSpUtils.getUserType().equals("1")) {
                 startActivity(new Intent(this, MainActivity.class));
             } else {
@@ -27,5 +35,18 @@ public class SplashActivity extends AppCompatActivity {
             startActivity(new Intent(this, LoginActivity.class));
         }
         finish();
+    }
+
+    private void initIm() {
+        if (AVUser.currentUser().isAuthenticated()) {
+            Log.e("arms", "Im初始化了");
+            LCChatKit.getInstance().open(AVUser.getCurrentUser().getObjectId(), new AVIMClientCallback() {
+                @Override
+                public void done(AVIMClient avimClient, AVIMException e) {
+                    Log.e("arms", "Im初始化了成功了");
+                }
+            });
+        }
+
     }
 }

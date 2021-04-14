@@ -16,7 +16,8 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:supportsRtl="true"
         android:theme="@style/Theme.StudentHelp">
-        <activity android:name=".module.teachers.OrderActivity"></activity>
+        <activity android:name=".module.main.order.OrderListActivity"></activity>
+        <activity android:name=".module.main.order.OrderActivity" />
         <activity android:name=".module.userinfo.EditUserInfoActivity" />
         <activity
             android:name=".module.teacher.PublishActivity"

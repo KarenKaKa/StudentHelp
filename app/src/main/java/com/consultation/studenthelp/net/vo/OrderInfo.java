@@ -12,4 +12,5 @@ public class OrderInfo extends BaseTableInfo {
     public static final String ORDER_START_TIME = "start_time";
     public static final String ORDER_END_TIME = "end_time";
     public static final String ORDER_ADDRESS = "address";
+    public static final String ORDER_AGREE = "agree";
 }

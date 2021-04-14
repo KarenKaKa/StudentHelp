@@ -11,6 +11,7 @@ import com.consultation.studenthelp.base.BaseActivity;
 import com.consultation.studenthelp.base.BasePresenter;
 import com.consultation.studenthelp.databinding.ActivityTeacherMainBinding;
 import com.consultation.studenthelp.module.login.LoginActivity;
+import com.consultation.studenthelp.module.main.order.OrderListActivity;
 import com.consultation.studenthelp.module.userinfo.EditUserInfoActivity;
 import com.consultation.studenthelp.utils.UserSpUtils;
 
@@ -50,7 +51,7 @@ public class TeacherMainActivity extends BaseActivity implements View.OnClickLis
         } else if (id == R.id.tvMessage) {
             toast("留言列表");
         } else if (id == R.id.tvAppointment) {
-            toast("预约列表");
+            startActivity(new Intent(this, OrderListActivity.class));
         } else if (id == R.id.tvTests) {
             toast("发布测试");
         } else if (id == R.id.tvArt) {

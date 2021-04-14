@@ -2,6 +2,7 @@ package com.consultation.studenthelp.module.login;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.RadioGroup;
 
@@ -13,6 +14,12 @@ import com.consultation.studenthelp.databinding.ActivityLoginBinding;
 import com.consultation.studenthelp.module.main.MainActivity;
 import com.consultation.studenthelp.module.teacher.TeacherMainActivity;
 import com.consultation.studenthelp.utils.UserSpUtils;
+
+import cn.leancloud.AVUser;
+import cn.leancloud.chatkit.LCChatKit;
+import cn.leancloud.im.v2.AVIMClient;
+import cn.leancloud.im.v2.AVIMException;
+import cn.leancloud.im.v2.callback.AVIMClientCallback;
 
 public class LoginActivity extends BaseActivity<LoginPresenter> implements LoginContract.View, View.OnClickListener {
     private String userType = "1";
@@ -95,11 +102,25 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     @Override
     public void loginSuccess() {
+        initIm();
         if (userType.equals("1")) {
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
         } else {
             startActivity(new Intent(LoginActivity.this, TeacherMainActivity.class));
         }
         finish();
+    }
+
+    private void initIm() {
+        if (AVUser.currentUser().isAuthenticated()) {
+            Log.e("arms", "Im初始化了");
+            LCChatKit.getInstance().open(AVUser.getCurrentUser().getObjectId(), new AVIMClientCallback() {
+                @Override
+                public void done(AVIMClient avimClient, AVIMException e) {
+                    Log.e("arms", "Im初始化了成功了");
+                }
+            });
+        }
+
     }
 }
