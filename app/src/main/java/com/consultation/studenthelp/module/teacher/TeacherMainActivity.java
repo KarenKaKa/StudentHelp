@@ -11,6 +11,7 @@ import com.consultation.studenthelp.base.BaseActivity;
 import com.consultation.studenthelp.base.BasePresenter;
 import com.consultation.studenthelp.databinding.ActivityTeacherMainBinding;
 import com.consultation.studenthelp.module.login.LoginActivity;
+import com.consultation.studenthelp.module.userinfo.EditUserInfoActivity;
 import com.consultation.studenthelp.utils.UserSpUtils;
 
 //TODO 待做个人信息编辑页  性别 昵称 职称 擅长分类
@@ -43,7 +44,7 @@ public class TeacherMainActivity extends BaseActivity implements View.OnClickLis
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.ivHead) {
-            toast("修改头像");
+            startActivity(new Intent(this, EditUserInfoActivity.class));
         } else if (id == R.id.tvConsults) {
             toast("咨询列表");
         } else if (id == R.id.tvMessage) {
