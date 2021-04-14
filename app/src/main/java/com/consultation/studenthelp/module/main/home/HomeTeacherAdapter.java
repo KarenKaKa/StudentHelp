@@ -48,18 +48,20 @@ public class HomeTeacherAdapter extends RecyclerView.Adapter<HomeTeacherAdapter.
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LCChatKit.getInstance().open(LCChatKit.getInstance().getCurrentUserId(), new AVIMClientCallback() {
-                    @Override
-                    public void done(AVIMClient client, AVIMException e) {
-                        if (null == e) {
-                            Intent intent = new Intent(mContext, LCIMConversationActivity.class);
-                            intent.putExtra(LCIMConstants.PEER_ID, bean.getObjectId());
-                            mContext.startActivity(intent);
-                        } else {
-                            Toast.makeText(mContext, e.toString(), Toast.LENGTH_SHORT).show();
+                if (!AVUser.getCurrentUser().getObjectId().isEmpty()) {
+                    LCChatKit.getInstance().open(AVUser.getCurrentUser().getObjectId(), new AVIMClientCallback() {
+                        @Override
+                        public void done(AVIMClient client, AVIMException e) {
+                            if (null == e) {
+                                Intent intent = new Intent(mContext, LCIMConversationActivity.class);
+                                intent.putExtra(LCIMConstants.PEER_ID, bean.getObjectId());
+                                mContext.startActivity(intent);
+                            } else {
+                                Toast.makeText(mContext, e.toString(), Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                });
+                    });
+                }
             }
         });
     }

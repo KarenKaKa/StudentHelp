@@ -8,6 +8,7 @@ import android.widget.RadioGroup;
 
 import androidx.databinding.DataBindingUtil;
 
+import com.consultation.studenthelp.CustomUserProvider;
 import com.consultation.studenthelp.R;
 import com.consultation.studenthelp.base.BaseActivity;
 import com.consultation.studenthelp.databinding.ActivityLoginBinding;
@@ -17,6 +18,7 @@ import com.consultation.studenthelp.utils.UserSpUtils;
 
 import cn.leancloud.AVUser;
 import cn.leancloud.chatkit.LCChatKit;
+import cn.leancloud.im.AVIMOptions;
 import cn.leancloud.im.v2.AVIMClient;
 import cn.leancloud.im.v2.AVIMException;
 import cn.leancloud.im.v2.callback.AVIMClientCallback;
@@ -112,14 +114,20 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     }
 
     private void initIm() {
-        if (AVUser.currentUser().isAuthenticated()) {
+        if (!UserSpUtils.getUserName().isEmpty()) {
+            LCChatKit.getInstance().setProfileProvider(CustomUserProvider.getInstance());
+            AVIMOptions.getGlobalOptions().setAutoOpen(true);
             LCChatKit.getInstance().open(AVUser.getCurrentUser().getObjectId(), new AVIMClientCallback() {
                 @Override
                 public void done(AVIMClient avimClient, AVIMException e) {
-                    Log.e("arms", "Im初始化了成功了");
+                    if (null == e) {
+                        Log.e("arms", "Im初始化了成功了");
+                    } else {
+                        Log.e("arms", "Im初始化了失败了" + e.toString());
+                    }
+
                 }
             });
         }
-
     }
 }

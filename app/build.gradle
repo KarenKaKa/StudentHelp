@@ -71,6 +71,11 @@ dependencies {
     implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0'
 
     implementation 'cn.leancloud:storage-android:7.2.3'
+    implementation('cn.leancloud:realtime-android:7.2.2') {
+        exclude group: 'cn.leancloud', module: 'realtime-core'
+    }
+    implementation ('cn.leancloud:realtime-core:7.2.2')
+
     implementation 'com.youth.banner:banner:2.0.10'
     implementation project(':leancloudchatkit')
     implementation project(path: ':imagepicker')
