@@ -34,8 +34,8 @@ public class HomeTeacherAdapter extends RecyclerView.Adapter<HomeTeacherAdapter.
     @Override
     public void onBindViewHolder(@NonNull HomeTeacherViewHolder holder, int position) {
         AVUser bean = list.get(position);
-        String skills = bean.getString(UserInfo.USER_SKILLS);
-        holder.name.setText(bean.getString(UserInfo.USER_NAME) + "\n" + bean.getString(UserInfo.USER_SKILLS));
+        holder.name.setText(bean.getString(UserInfo.USER_NAME));
+        holder.skills.setText(bean.getString(UserInfo.USER_SKILLS));
     }
 
     @Override
@@ -45,10 +45,12 @@ public class HomeTeacherAdapter extends RecyclerView.Adapter<HomeTeacherAdapter.
 
     public static class HomeTeacherViewHolder extends RecyclerView.ViewHolder {
         private TextView name;
+        private TextView skills;
 
         public HomeTeacherViewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.name);
+            skills = itemView.findViewById(R.id.skills);
         }
     }
 }

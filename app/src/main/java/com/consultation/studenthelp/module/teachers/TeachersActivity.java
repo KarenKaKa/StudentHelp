@@ -21,7 +21,7 @@ import cn.leancloud.AVUser;
 public class TeachersActivity extends BaseActivity<TeachersPresenter> implements TeachersView {
     private ActivityTeachersBinding binding;
     private TeachersAdapter adapter;
-    private List<AVObject> teachers = new ArrayList<>();
+    private List<AVUser> teachers = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +49,7 @@ public class TeachersActivity extends BaseActivity<TeachersPresenter> implements
     @Override
     public void setData(List<AVUser> students, List<AVObject> labels) {
         teachers.addAll(students);
-        adapter.refreshLabels(labels);
+        adapter.refreshLabels(labels, getIntent().getBooleanExtra("fromOrder", false));
         adapter.notifyDataSetChanged();
     }
 }

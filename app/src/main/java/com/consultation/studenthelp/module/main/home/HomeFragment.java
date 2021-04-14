@@ -48,7 +48,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeVie
         binding = DataBindingUtil.bind(view);
         binding.setLifecycleOwner(this);
 
-        binding.tvConsults.setOnClickListener(this);
+        binding.setOnClickListener(this);
     }
 
     @Override
@@ -90,6 +90,10 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeVie
         int id = view.getId();
         if (id == R.id.tvConsults) {
             startActivity(new Intent(getActivity(), TeachersActivity.class));
+        } else if (id == R.id.tvDate) {
+            Intent intent = new Intent(getActivity(), TeachersActivity.class);
+            intent.putExtra("fromOrder", true);
+            startActivity(intent);
         }
     }
 

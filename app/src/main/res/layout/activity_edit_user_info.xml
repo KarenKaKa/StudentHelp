@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="onClickListener"
+            type="android.view.View.OnClickListener" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".module.login.LoginActivity">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clTop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/pink"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/ivBack"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:onClick="@{onClickListener}"
+                android:scaleType="centerInside"
+                android:src="@drawable/icon_back_white"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="编辑资料"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/ivBack"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/ivBack" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ImageView
+            android:id="@+id/ivHead"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="30dp"
+            android:onClick="@{onClickListener}"
+            android:src="@drawable/icon_home_head"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/clTop" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_camare"
+            app:layout_constraintBottom_toBottomOf="@+id/ivHead"
+            app:layout_constraintLeft_toLeftOf="@+id/ivHead"
+            app:layout_constraintRight_toRightOf="@+id/ivHead"
+            app:layout_constraintTop_toTopOf="@+id/ivHead" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:text="性别"
+            android:textSize="12sp"
+            app:layout_constraintLeft_toLeftOf="@+id/switch_btn"
+            app:layout_constraintRight_toRightOf="@+id/switch_btn"
+            app:layout_constraintTop_toBottomOf="@+id/switch_btn" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switch_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:longClickable="false"
+            android:textColor="@color/white"
+            android:textOff="男"
+            android:textOn="女"
+            app:layout_constraintBottom_toBottomOf="@+id/ivHead"
+            app:layout_constraintRight_toRightOf="@id/etInput"
+            app:layout_constraintTop_toTopOf="@+id/ivHead"
+            app:showText="true"
+            app:switchPadding="5dp"
+            app:switchTextAppearance="@style/SwitchCompat.Text"
+            app:theme="@style/SwitchCompat.Control" />
+
+        <EditText
+            android:id="@+id/etInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="30dp"
+            android:hint="请输入新昵称"
+            android:imeOptions="actionNext"
+            android:maxLength="11"
+            android:maxLines="1"
+            app:layout_constraintTop_toBottomOf="@+id/ivHead" />
+
+        <EditText
+            android:id="@+id/etSkills"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="30dp"
+            android:hint="请输入个人职称"
+            android:imeOptions="actionDone"
+            android:maxLength="15"
+            android:maxLines="1"
+            app:layout_constraintTop_toBottomOf="@+id/etInput" />
+
+        <TextView
+            android:id="@+id/tvLabels"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="请选择擅长分类（最多选择三个）"
+            app:layout_constraintLeft_toLeftOf="@+id/etInput"
+            app:layout_constraintTop_toBottomOf="@+id/etSkills" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerLabels"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@+id/tvLabels" />
+
+        <TextView
+            android:id="@+id/btnSubmit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="30dp"
+            android:background="@drawable/shape_solid_f6729f_2"
+            android:gravity="center"
+            android:onClick="@{onClickListener}"
+            android:paddingVertical="11dp"
+            android:text="确定"
+            android:textColor="#fff"
+            android:textSize="15sp"
+            app:layout_constraintTop_toBottomOf="@+id/recyclerLabels" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            app:constraint_referenced_ids="etSkills,tvLabels,recyclerLabels" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

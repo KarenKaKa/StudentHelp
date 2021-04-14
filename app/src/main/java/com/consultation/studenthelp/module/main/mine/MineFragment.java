@@ -2,11 +2,9 @@ package com.consultation.studenthelp.module.main.mine;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.databinding.DataBindingUtil;
 
@@ -15,14 +13,12 @@ import com.consultation.studenthelp.base.BaseFragment;
 import com.consultation.studenthelp.base.BasePresenter;
 import com.consultation.studenthelp.databinding.FragmentMineBinding;
 import com.consultation.studenthelp.module.login.LoginActivity;
-import com.consultation.studenthelp.module.main.MainActivity;
+import com.consultation.studenthelp.module.userinfo.EditUserInfoActivity;
 import com.consultation.studenthelp.utils.UserSpUtils;
 
 import java.util.Objects;
 
 import cn.leancloud.chatkit.LCChatKit;
-import cn.leancloud.chatkit.activity.LCIMConversationActivity;
-import cn.leancloud.chatkit.utils.LCIMConstants;
 import cn.leancloud.im.v2.AVIMClient;
 import cn.leancloud.im.v2.AVIMException;
 import cn.leancloud.im.v2.callback.AVIMClientCallback;
@@ -68,7 +64,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.ivHead) {
-            toast("修改头像");
+            startActivity(new Intent(getActivity(), EditUserInfoActivity.class));
         } else if (id == R.id.tvConsults) {
             startActivity(new Intent(getActivity(), MyConversationListActivity.class));
         } else if (id == R.id.tvAppointment) {
@@ -81,7 +77,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
             LCChatKit.getInstance().close(new AVIMClientCallback() {
                 @Override
                 public void done(AVIMClient avimClient, AVIMException e) {
-                    if (null!= e) {
+                    if (null != e) {
                         e.printStackTrace();
                     } else {
                         getActivity().finish();
