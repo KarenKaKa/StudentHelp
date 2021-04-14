@@ -37,6 +37,7 @@ public class TeacherMainActivity extends BaseActivity implements View.OnClickLis
         binding.tvTests.setOnClickListener(this);
         binding.tvMessage.setOnClickListener(this);
         binding.tvArt.setOnClickListener(this);
+        binding.tvPubArt.setOnClickListener(this);
 
         binding.name.setText(UserSpUtils.getUserName());
     }
@@ -75,6 +76,8 @@ public class TeacherMainActivity extends BaseActivity implements View.OnClickLis
             UserSpUtils.logout();
             startActivity(new Intent(this, LoginActivity.class));
             finish();
+        } else if (id == R.id.tvPubArt) {
+            startActivity(new Intent(this, PublishActivity.class));
         }
     }
 }

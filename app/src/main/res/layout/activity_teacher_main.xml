@@ -133,6 +133,19 @@
             app:layout_constraintTop_toBottomOf="@+id/tvTests" />
 
         <TextView
+            android:id="@+id/tvPubArt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/icon_record"
+            android:drawableRight="@drawable/icon_arrow_right"
+            android:drawablePadding="10dp"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="20dp"
+            android:text="发布文章"
+            android:textColor="#333"
+            app:layout_constraintTop_toBottomOf="@+id/tvArt" />
+
+        <TextView
             android:id="@+id/tvLogout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -143,6 +156,6 @@
             android:paddingVertical="20dp"
             android:text="退出登录"
             android:textColor="#333"
-            app:layout_constraintTop_toBottomOf="@+id/tvArt" />
+            app:layout_constraintTop_toBottomOf="@+id/tvPubArt" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
