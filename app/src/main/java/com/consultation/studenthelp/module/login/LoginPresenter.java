@@ -6,8 +6,12 @@ import com.consultation.studenthelp.base.BasePresenter;
 import com.consultation.studenthelp.net.vo.UserInfo;
 import com.consultation.studenthelp.utils.UserSpUtils;
 
+import java.util.List;
+
+import cn.leancloud.AVQuery;
 import cn.leancloud.AVUser;
 import io.reactivex.Observer;
+import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 
 public class LoginPresenter extends BasePresenter<LoginContract.View> {
@@ -24,24 +28,48 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> {
             mRootView.toast("请输入密码");
             return;
         }
-        AVUser.logIn(userName, code).subscribe(new Observer<AVUser>() {
-            public void onSubscribe(Disposable disposable) {
+        AVQuery<AVUser> query = AVUser.getQuery();
+        query.whereEqualTo(UserInfo.USER_NAME, userName);
+        query.whereEqualTo(UserInfo.USER_TYPE, userType);
+        query.findInBackground().subscribe(new Observer<List<AVUser>>() {
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
             }
 
-            public void onNext(AVUser user) {
-                // 登录成功
-                UserSpUtils.setIsLogin(true);
-                UserSpUtils.setUserType(userType);
-                UserSpUtils.setUserName(userName);
-                UserSpUtils.setUerId(user.getObjectId());
-                mRootView.loginSuccess();
+            @Override
+            public void onNext(@NonNull List<AVUser> avUsers) {
+                if (avUsers.size() > 0) {
+                    AVUser.logIn(userName, code).subscribe(new Observer<AVUser>() {
+                        public void onSubscribe(Disposable disposable) {
+                        }
+
+                        public void onNext(AVUser user) {
+                            // 登录成功
+                            UserSpUtils.setIsLogin(true);
+                            UserSpUtils.setUserType(userType);
+                            UserSpUtils.setUserName(userName);
+                            UserSpUtils.setUerId(user.getObjectId());
+                            mRootView.loginSuccess();
+                        }
+
+                        public void onError(Throwable throwable) {
+                            mRootView.toast("密码错误");
+                        }
+
+                        public void onComplete() {
+                        }
+                    });
+                } else {
+                    mRootView.toast("用户不存在");
+                }
             }
 
-            public void onError(Throwable throwable) {
-                // 登录失败（可能是密码错误）
-                mRootView.toast("密码错误");
+            @Override
+            public void onError(@NonNull Throwable e) {
+                mRootView.toast("用户不存在");
             }
 
+            @Override
             public void onComplete() {
             }
         });

@@ -111,7 +111,7 @@ public class TeachersAdapter extends RecyclerView.Adapter<TeachersAdapter.Teache
                     intent.putExtra(UserInfo.OBJECT_ID, bean.getObjectId());
                     mContext.startActivity(intent);
                 } else if (bean.getBoolean(UserInfo.USER_AVAILABLE)) {
-                    LCChatKit.getInstance().open(LCChatKit.getInstance().getCurrentUserId(), new AVIMClientCallback() {
+                    LCChatKit.getInstance().open(AVUser.getCurrentUser().getObjectId(), new AVIMClientCallback() {
                         @Override
                         public void done(AVIMClient client, AVIMException e) {
                             if (null == e) {

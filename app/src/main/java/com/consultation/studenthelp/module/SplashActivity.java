@@ -39,7 +39,6 @@ public class SplashActivity extends AppCompatActivity {
 
     private void initIm() {
         if (AVUser.currentUser().isAuthenticated()) {
-            Log.e("arms", "Im初始化了");
             LCChatKit.getInstance().open(AVUser.getCurrentUser().getObjectId(), new AVIMClientCallback() {
                 @Override
                 public void done(AVIMClient avimClient, AVIMException e) {
@@ -47,6 +46,5 @@ public class SplashActivity extends AppCompatActivity {
                 }
             });
         }
-
     }
 }

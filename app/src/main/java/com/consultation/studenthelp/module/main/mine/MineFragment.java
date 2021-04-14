@@ -19,6 +19,7 @@ import com.consultation.studenthelp.utils.UserSpUtils;
 
 import java.util.Objects;
 
+import cn.leancloud.AVUser;
 import cn.leancloud.chatkit.LCChatKit;
 import cn.leancloud.im.v2.AVIMClient;
 import cn.leancloud.im.v2.AVIMException;
@@ -74,7 +75,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
         } else if (id == R.id.tvTeachers) {
             toast("我喜欢的老师");
         } else if (id == R.id.tvLogout) {
-            LCChatKit.getInstance().close(new AVIMClientCallback() {
+            LCChatKit.getInstance().getClient().close(new AVIMClientCallback() {
                 @Override
                 public void done(AVIMClient avimClient, AVIMException e) {
                     if (null != e) {
