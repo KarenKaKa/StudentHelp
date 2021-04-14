@@ -16,10 +16,22 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:supportsRtl="true"
         android:theme="@style/Theme.StudentHelp">
-        <activity android:name=".module.teacher.MyArticlesActivity"></activity>
-        <activity android:name=".module.main.order.OrderListActivity" />
-        <activity android:name=".module.main.order.OrderActivity" />
-        <activity android:name=".module.userinfo.EditUserInfoActivity" />
+        <activity
+            android:name=".module.teacher.MyArticlesActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.main.order.OrderListActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.main.order.OrderActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.userinfo.EditUserInfoActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".module.teacher.PublishActivity"
             android:configChanges="orientation|screenSize"
