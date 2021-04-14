@@ -19,7 +19,6 @@ import com.consultation.studenthelp.utils.UserSpUtils;
 
 import java.util.Objects;
 
-import cn.leancloud.AVUser;
 import cn.leancloud.chatkit.LCChatKit;
 import cn.leancloud.im.v2.AVIMClient;
 import cn.leancloud.im.v2.AVIMException;
@@ -52,6 +51,11 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
         binding.tvTeachers.setOnClickListener(this);
         binding.tvTests.setOnClickListener(this);
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         binding.name.setText(UserSpUtils.getUserName());
     }
 

@@ -112,15 +112,18 @@ public class EditUserInfoActivity extends BaseActivity implements View.OnClickLi
             }
             AVUser user = AVUser.currentUser();
             user.setUsername(userName);
-            user.put(UserInfo.USER_SKILLS, skill);
             user.put(UserInfo.USER_GENDER, gender);
-            user.put(UserInfo.USER_LABELS, adapter.getLabels());
+            if (UserSpUtils.getUserType().equals(UserInfo.USER_TYPE_TEACHER)) {
+                user.put(UserInfo.USER_SKILLS, skill);
+                user.put(UserInfo.USER_LABELS, adapter.getLabels());
+            }
             user.saveInBackground().subscribe(new Observer<AVObject>() {
                 public void onSubscribe(Disposable disposable) {
                 }
 
                 public void onNext(AVObject avUser) {
                     toast("修改成功");
+                    UserSpUtils.setUserName(userName);
                     finish();
                 }
 
