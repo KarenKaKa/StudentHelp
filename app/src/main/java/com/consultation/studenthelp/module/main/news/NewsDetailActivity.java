@@ -1,6 +1,7 @@
 package com.consultation.studenthelp.module.main.news;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
@@ -29,6 +30,12 @@ import java.util.List;
 import cn.leancloud.AVObject;
 import cn.leancloud.AVQuery;
 import cn.leancloud.AVUser;
+import cn.leancloud.chatkit.LCChatKit;
+import cn.leancloud.chatkit.activity.LCIMConversationActivity;
+import cn.leancloud.chatkit.utils.LCIMConstants;
+import cn.leancloud.im.v2.AVIMClient;
+import cn.leancloud.im.v2.AVIMException;
+import cn.leancloud.im.v2.callback.AVIMClientCallback;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
@@ -37,6 +44,7 @@ import io.reactivex.disposables.Disposable;
  */
 public class NewsDetailActivity extends BaseActivity {
     private ActivityNewsDetailBinding binding;
+    private String teacherId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +63,18 @@ public class NewsDetailActivity extends BaseActivity {
         binding.tvChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO
-                toast("打开聊天页面咨询");
+                LCChatKit.getInstance().open(AVUser.getCurrentUser().getObjectId(), new AVIMClientCallback() {
+                    @Override
+                    public void done(AVIMClient client, AVIMException e) {
+                        if (null == e) {
+                            Intent intent = new Intent(NewsDetailActivity.this, LCIMConversationActivity.class);
+                            intent.putExtra(LCIMConstants.PEER_ID, teacherId);
+                            startActivity(intent);
+                        } else {
+                            toast(e.toString());
+                        }
+                    }
+                });
             }
         });
     }
@@ -89,7 +107,7 @@ public class NewsDetailActivity extends BaseActivity {
     }
 
     private void showData(AVObject details) {
-        String teacherId = details.getString(ArticlesInfo.NEWS_TEACHER_ID);
+        teacherId = details.getString(ArticlesInfo.NEWS_TEACHER_ID);
         AVQuery query = AVUser.getQuery();
         query.whereEqualTo(UserInfo.OBJECT_ID, teacherId);
         query.findInBackground().compose(RxSchedulers.Schedulers()).subscribe(new Observer<List<AVUser>>() {
