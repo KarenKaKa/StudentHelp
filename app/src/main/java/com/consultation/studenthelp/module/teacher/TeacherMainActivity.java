@@ -11,11 +11,16 @@ import com.consultation.studenthelp.base.BaseActivity;
 import com.consultation.studenthelp.base.BasePresenter;
 import com.consultation.studenthelp.databinding.ActivityTeacherMainBinding;
 import com.consultation.studenthelp.module.login.LoginActivity;
+import com.consultation.studenthelp.module.main.mine.MyConversationListActivity;
 import com.consultation.studenthelp.module.main.order.OrderListActivity;
 import com.consultation.studenthelp.module.userinfo.EditUserInfoActivity;
 import com.consultation.studenthelp.utils.UserSpUtils;
 
-//TODO 待做个人信息编辑页  性别 昵称 职称 擅长分类
+import cn.leancloud.chatkit.LCChatKit;
+import cn.leancloud.im.v2.AVIMClient;
+import cn.leancloud.im.v2.AVIMException;
+import cn.leancloud.im.v2.callback.AVIMClientCallback;
+
 public class TeacherMainActivity extends BaseActivity implements View.OnClickListener {
     private ActivityTeacherMainBinding binding;
 
@@ -47,7 +52,7 @@ public class TeacherMainActivity extends BaseActivity implements View.OnClickLis
         if (id == R.id.ivHead) {
             startActivity(new Intent(this, EditUserInfoActivity.class));
         } else if (id == R.id.tvConsults) {
-            toast("咨询列表");
+            startActivity(new Intent(this, MyConversationListActivity.class));
         } else if (id == R.id.tvMessage) {
             toast("留言列表");
         } else if (id == R.id.tvAppointment) {
@@ -57,6 +62,16 @@ public class TeacherMainActivity extends BaseActivity implements View.OnClickLis
         } else if (id == R.id.tvArt) {
             startActivity(new Intent(this, MyArticlesActivity.class));
         } else if (id == R.id.tvLogout) {
+            LCChatKit.getInstance().close(new AVIMClientCallback() {
+                @Override
+                public void done(AVIMClient avimClient, AVIMException e) {
+                    if (null != e) {
+                        e.printStackTrace();
+                    } else {
+                        finish();
+                    }
+                }
+            });
             UserSpUtils.logout();
             startActivity(new Intent(this, LoginActivity.class));
             finish();

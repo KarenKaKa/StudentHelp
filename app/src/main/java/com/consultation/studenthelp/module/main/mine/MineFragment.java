@@ -24,7 +24,6 @@ import cn.leancloud.im.v2.AVIMClient;
 import cn.leancloud.im.v2.AVIMException;
 import cn.leancloud.im.v2.callback.AVIMClientCallback;
 
-//TODO 待做个人信息编辑页  性别 昵称
 public class MineFragment extends BaseFragment implements View.OnClickListener {
     private FragmentMineBinding binding;
 
