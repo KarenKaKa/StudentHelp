@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,13 +23,23 @@ import cn.leancloud.AVQuery;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
+/**
+ * 文章列表
+ */
 public class NewsFragment extends BaseFragment {
-
     private RecyclerView recyclerNews;
     private List<AVObject> dataList = new ArrayList<>();
+    private String teacherId;
+    private TextView tvTitle;
 
     public static NewsFragment newInstance() {
         NewsFragment fragment = new NewsFragment();
+        return fragment;
+    }
+
+    public static NewsFragment newInstance(String teacherId) {
+        NewsFragment fragment = new NewsFragment();
+        fragment.teacherId = teacherId;
         return fragment;
     }
 
@@ -42,6 +53,8 @@ public class NewsFragment extends BaseFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getData();
+        tvTitle = view.findViewById(R.id.tvTitle);
+        tvTitle.setText(teacherId == null ? "主题阅读" : "我的文章");
         recyclerNews = view.findViewById(R.id.recyclerNews);
         recyclerNews.setAdapter(new NewsAdapter(getContext(), dataList));
 
@@ -54,6 +67,9 @@ public class NewsFragment extends BaseFragment {
 
     private void getData() {
         AVQuery<AVObject> query = new AVQuery<>(ArticlesInfo.TABLE_NAME);
+        if (teacherId != null) {
+            query.whereEqualTo(ArticlesInfo.NEWS_TEACHER_ID, teacherId);
+        }
         query.findInBackground().compose(RxSchedulers.Schedulers()).subscribe(new Observer<List<AVObject>>() {
             public void onSubscribe(Disposable disposable) {
             }

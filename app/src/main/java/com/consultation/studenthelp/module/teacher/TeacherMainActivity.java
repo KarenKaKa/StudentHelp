@@ -55,8 +55,7 @@ public class TeacherMainActivity extends BaseActivity implements View.OnClickLis
         } else if (id == R.id.tvTests) {
             toast("发布测试");
         } else if (id == R.id.tvArt) {
-            toast("文章列表");
-//            startActivity(new Intent(this, PublishActivity.class));
+            startActivity(new Intent(this, MyArticlesActivity.class));
         } else if (id == R.id.tvLogout) {
             UserSpUtils.logout();
             startActivity(new Intent(this, LoginActivity.class));
