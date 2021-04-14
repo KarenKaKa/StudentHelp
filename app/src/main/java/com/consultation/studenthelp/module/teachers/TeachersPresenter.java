@@ -19,35 +19,18 @@ public class TeachersPresenter extends BasePresenter<TeachersView> {
     }
 
 
-    public void getTeachers() {
+    public void getTeachers(String selectedLabelId) {
         AVQuery<AVUser> query = AVUser.getQuery();
         query.whereEqualTo(UserInfo.USER_TYPE, UserInfo.USER_TYPE_TEACHER);
+        if (!selectedLabelId.equals("all")) {
+            query.whereContains(UserInfo.USER_LABELS, selectedLabelId);
+        }
         query.findInBackground().subscribe(new Observer<List<AVUser>>() {
             public void onSubscribe(Disposable disposable) {
             }
 
             public void onNext(List<AVUser> students) {
-                AVQuery<AVObject> labelsQuery = new AVQuery<>(LabelsInfo.TABLE_NAME);
-                labelsQuery.findInBackground().subscribe(new Observer<List<AVObject>>() {
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-                    }
-
-                    @Override
-                    public void onNext(@NonNull List<AVObject> avObjects) {
-                        mRootView.setData(students, avObjects);
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                        mRootView.setData(students, null);
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+                mRootView.setData(students);
             }
 
             public void onError(Throwable throwable) {
@@ -55,6 +38,30 @@ public class TeachersPresenter extends BasePresenter<TeachersView> {
             }
 
             public void onComplete() {
+            }
+        });
+    }
+
+    public void getLabels() {
+        AVQuery<AVObject> labelsQuery = new AVQuery<>(LabelsInfo.TABLE_NAME);
+        labelsQuery.findInBackground().subscribe(new Observer<List<AVObject>>() {
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
+            }
+
+            @Override
+            public void onNext(@NonNull List<AVObject> avObjects) {
+                mRootView.setLabels(avObjects);
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+                mRootView.toast(e.getMessage());
+            }
+
+            @Override
+            public void onComplete() {
+
             }
         });
     }

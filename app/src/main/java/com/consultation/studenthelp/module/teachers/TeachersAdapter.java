@@ -18,6 +18,7 @@ import com.consultation.studenthelp.module.main.order.OrderActivity;
 import com.consultation.studenthelp.net.vo.LabelsInfo;
 import com.consultation.studenthelp.net.vo.UserInfo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.leancloud.AVObject;
@@ -34,7 +35,7 @@ public class TeachersAdapter extends RecyclerView.Adapter<TeachersAdapter.Teache
 
     private Context mContext;
     private List<AVUser> list;
-    private List<AVObject> labels;
+    private List<AVObject> labels = new ArrayList<>();
     private boolean fromOrder;
 
     public TeachersAdapter(Context mContext, List<AVUser> list) {
@@ -43,7 +44,7 @@ public class TeachersAdapter extends RecyclerView.Adapter<TeachersAdapter.Teache
     }
 
     public void refreshLabels(List<AVObject> labels, boolean fromOrder) {
-        this.labels = labels;
+        this.labels.addAll(labels);
         this.fromOrder = fromOrder;
     }
 

@@ -67,9 +67,6 @@ dependencies {
         transitive = false
     }
 
-    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0'
-    implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0'
-
     implementation 'cn.leancloud:storage-android:7.2.3'
     implementation('cn.leancloud:realtime-android:7.2.2') {
         exclude group: 'cn.leancloud', module: 'realtime-core'

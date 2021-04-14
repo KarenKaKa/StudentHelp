@@ -10,5 +10,7 @@ import cn.leancloud.AVUser;
 
 public interface TeachersView extends BaseView {
 
-    void setData(List<AVUser> students, List<AVObject> avObjects);
+    void setData(List<AVUser> students);
+
+    void setLabels(List<AVObject> avObjects);
 }

@@ -1,6 +1,7 @@
 package com.consultation.studenthelp.module.main.home;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.consultation.studenthelp.R;
+import com.consultation.studenthelp.module.teachers.TeachersActivity;
 import com.consultation.studenthelp.net.vo.LabelsInfo;
 
 import java.util.List;
@@ -36,7 +38,14 @@ public class HomeSortAdapter extends RecyclerView.Adapter<HomeSortAdapter.Teache
     public void onBindViewHolder(@NonNull TeacherViewHolder holder, int position) {
         AVObject bean = list.get(position);
         holder.name.setText(bean.getString(LabelsInfo.LABEL_NAME));
-
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, TeachersActivity.class);
+                intent.putExtra("selectedLabelId", bean.getObjectId());
+                mContext.startActivity(intent);
+            }
+        });
     }
 
     @Override
