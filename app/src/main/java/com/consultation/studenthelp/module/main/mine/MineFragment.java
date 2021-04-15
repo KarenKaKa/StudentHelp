@@ -12,6 +12,7 @@ import com.consultation.studenthelp.R;
 import com.consultation.studenthelp.base.BaseFragment;
 import com.consultation.studenthelp.base.BasePresenter;
 import com.consultation.studenthelp.databinding.FragmentMineBinding;
+import com.consultation.studenthelp.module.leavemessage.MyLeaveMessageActivity;
 import com.consultation.studenthelp.module.login.LoginActivity;
 import com.consultation.studenthelp.module.main.order.OrderListActivity;
 import com.consultation.studenthelp.module.userinfo.EditUserInfoActivity;
@@ -50,6 +51,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
         binding.tvLogout.setOnClickListener(this);
         binding.tvTeachers.setOnClickListener(this);
         binding.tvTests.setOnClickListener(this);
+        binding.tvMessage.setOnClickListener(this);
 
     }
 
@@ -92,6 +94,8 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
             UserSpUtils.logout();
             startActivity(new Intent(getActivity(), LoginActivity.class));
             Objects.requireNonNull(getActivity()).finish();
+        } else if (id == R.id.tvMessage) {
+            startActivity(new Intent(getActivity(), MyLeaveMessageActivity.class));
         }
     }
 }

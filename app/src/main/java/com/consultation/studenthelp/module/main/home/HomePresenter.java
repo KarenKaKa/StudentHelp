@@ -21,6 +21,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
     public void getSorts() {
         AVQuery<AVObject> query = new AVQuery<>(LabelsInfo.TABLE_NAME);
+        query.limit(8);
         query.findInBackground().subscribe(new Observer<List<AVObject>>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {

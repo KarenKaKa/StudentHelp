@@ -10,6 +10,7 @@ import com.consultation.studenthelp.R;
 import com.consultation.studenthelp.base.BaseActivity;
 import com.consultation.studenthelp.base.BasePresenter;
 import com.consultation.studenthelp.databinding.ActivityTeacherMainBinding;
+import com.consultation.studenthelp.module.leavemessage.MyLeaveMessageActivity;
 import com.consultation.studenthelp.module.login.LoginActivity;
 import com.consultation.studenthelp.module.main.mine.MyConversationListActivity;
 import com.consultation.studenthelp.module.main.order.OrderListActivity;
@@ -55,7 +56,7 @@ public class TeacherMainActivity extends BaseActivity implements View.OnClickLis
         } else if (id == R.id.tvConsults) {
             startActivity(new Intent(this, MyConversationListActivity.class));
         } else if (id == R.id.tvMessage) {
-            toast("留言列表");
+            startActivity(new Intent(this, MyLeaveMessageActivity.class));
         } else if (id == R.id.tvAppointment) {
             startActivity(new Intent(this, OrderListActivity.class));
         } else if (id == R.id.tvTests) {
