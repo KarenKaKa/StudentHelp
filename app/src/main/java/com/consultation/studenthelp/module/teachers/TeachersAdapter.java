@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.consultation.studenthelp.R;
+import com.consultation.studenthelp.module.leavemessage.LeaveMessageActivity;
 import com.consultation.studenthelp.module.main.order.OrderActivity;
 import com.consultation.studenthelp.net.vo.LabelsInfo;
 import com.consultation.studenthelp.net.vo.UserInfo;
@@ -30,7 +31,6 @@ import cn.leancloud.im.v2.AVIMClient;
 import cn.leancloud.im.v2.AVIMException;
 import cn.leancloud.im.v2.callback.AVIMClientCallback;
 
-//TODO 待做分类筛选项
 public class TeachersAdapter extends RecyclerView.Adapter<TeachersAdapter.TeacherViewHolder> {
 
     private Context mContext;
@@ -125,7 +125,10 @@ public class TeachersAdapter extends RecyclerView.Adapter<TeachersAdapter.Teache
                         }
                     });
                 } else {
-                    Toast.makeText(mContext, "留言", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(mContext, LeaveMessageActivity.class);
+                    intent.putExtra(UserInfo.USER_NAME, bean.getString(UserInfo.USER_NAME));
+                    intent.putExtra(UserInfo.OBJECT_ID, bean.getObjectId());
+                    mContext.startActivity(intent);
                 }
             }
         });
