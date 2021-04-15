@@ -37,7 +37,7 @@ public class MyLeaveMessageActivity extends BaseActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_order_list);
         binding.setLifecycleOwner(this);
 
-        binding.tvTitle.setText("我的留言");
+        binding.tvTitle.setText(UserSpUtils.getUserType().equals(UserInfo.USER_TYPE_TEACHER) ? "留言列表" : "我的留言");
         binding.ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

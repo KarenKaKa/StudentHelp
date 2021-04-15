@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.Arrays;
 
 import cn.leancloud.AVException;
+import cn.leancloud.AVUser;
 import cn.leancloud.callback.AVCallback;
 import cn.leancloud.chatkit.LCChatKit;
 import cn.leancloud.chatkit.R;
@@ -83,6 +84,17 @@ public class LCIMConversationActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+        if ("2".equals(AVUser.getCurrentUser().getString("type"))) {
+            findViewById(R.id.export).setVisibility(View.VISIBLE);
+            findViewById(R.id.export).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (conversationFragment != null) {
+                        conversationFragment.exportFile();
+                    }
+                }
+            });
+        }
         TextView textView = findViewById(R.id.tvTitle);
         textView.setText(title);
 
