@@ -8,8 +8,8 @@ import androidx.databinding.DataBindingUtil;
 
 import com.consultation.studenthelp.R;
 import com.consultation.studenthelp.databinding.ActivityTestBinding;
-import com.consultation.studenthelp.net.vo.AnswersBean;
-import com.consultation.studenthelp.net.vo.QuestionsBean;
+import com.consultation.studenthelp.net.vo.Question;
+import com.consultation.studenthelp.utils.DataUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,7 @@ import java.util.List;
 public class TestActivity extends AppCompatActivity {
     private String questionId;
     private ActivityTestBinding binding;
-    private List<QuestionsBean> list = new ArrayList<>();
+    private List<Question> list = new ArrayList<>();
     private TestAdapter adapter;
 
     @Override
@@ -37,8 +37,8 @@ public class TestActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        list.addAll(List.of(new QuestionsBean(List.of(new AnswersBean("1", 1), new AnswersBean("2", 2)), false),
-                new QuestionsBean(List.of(new AnswersBean("1", 1), new AnswersBean("2", 2)), true)));
+
+        list.addAll(DataUtils.getQuestionList(2));
         adapter = new TestAdapter(this, list);
         binding.recycler.setAdapter(adapter);
 

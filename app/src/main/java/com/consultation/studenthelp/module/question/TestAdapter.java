@@ -10,16 +10,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.consultation.studenthelp.R;
-import com.consultation.studenthelp.net.vo.AnswersBean;
-import com.consultation.studenthelp.net.vo.QuestionsBean;
+import com.consultation.studenthelp.net.vo.Answer;
+import com.consultation.studenthelp.net.vo.Question;
 
 import java.util.List;
 
 public class TestAdapter extends RecyclerView.Adapter<TestAdapter.ViewHolder> {
     private Context mContext;
-    private List<QuestionsBean> list;
+    private List<Question> list;
 
-    public TestAdapter(Context mContext, List<QuestionsBean> list) {
+    public TestAdapter(Context mContext, List<Question> list) {
         this.mContext = mContext;
         this.list = list;
     }
@@ -32,29 +32,27 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        QuestionsBean bean = list.get(position);
-//        holder.questionTitle.setText(bean.getQuestionTitle());
+        Question bean = list.get(position);
+        holder.questionTitle.setText(bean.getQuestionTitle());
 
-        holder.recyclerAnswer.setAdapter(new AnswerAdapter(mContext, bean.getAnswers(), bean.isMuti(), new OnItemClick() {
+        holder.recyclerAnswer.setAdapter(new AnswerAdapter(mContext, bean.getAnswerList(), bean.isMultiSelect(), new OnItemClick() {
             @Override
-            public void onItemClickListener(AnswersBean answersBean) {
-                if (bean.isMuti()) {
+            public void onItemClickListener(Answer answersBean) {
+                if (bean.isMultiSelect()) {
                     if (answersBean.isSelected()) {
-                        deleteSelected(bean.getSelectedList(), answersBean);
                         answersBean.setSelected(false);
                     } else {
                         answersBean.setSelected(true);
-                        bean.getSelectedList().add(answersBean);
                     }
                     notifyItemChanged(position);
                 } else {
                     if (!answersBean.isSelected()) {
-                        if (bean.getSelectedList().size() > 0) {
-                            bean.getSelectedList().get(0).setSelected(false);
-                            bean.getSelectedList().clear();
+                        for (Answer answer : bean.getAnswerList()) {
+                            if (answer.isSelected()) {
+                                answer.setSelected(false);
+                            }
                         }
                         answersBean.setSelected(true);
-                        bean.getSelectedList().add(answersBean);
                     }
                     notifyItemChanged(position);
                 }
@@ -62,20 +60,9 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.ViewHolder> {
         }));
     }
 
-    private void deleteSelected(List<AnswersBean> selectedList, AnswersBean bean) {
-        for (AnswersBean answersBean : selectedList) {
-            if (bean.getAnswerId().equals(answersBean.getAnswerId())) {
-                answersBean.setSelected(false);
-                bean.setSelected(false);
-                selectedList.remove(answersBean);
-                return;
-            }
-        }
-    }
-
-    private int getScores(List<AnswersBean> selectedList) {
+    private int getScores(List<Answer> selectedList) {
         int s = 0;
-        for (AnswersBean answersBean : selectedList) {
+        for (Answer answersBean : selectedList) {
             s += answersBean.getScore();
         }
         return s;
@@ -98,6 +85,6 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.ViewHolder> {
     }
 
     public interface OnItemClick {
-        void onItemClickListener(AnswersBean bean);
+        void onItemClickListener(Answer bean);
     }
 }

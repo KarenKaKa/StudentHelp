@@ -11,17 +11,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.consultation.studenthelp.R;
-import com.consultation.studenthelp.net.vo.AnswersBean;
+import com.consultation.studenthelp.net.vo.Answer;
 
 import java.util.List;
 
 public class AnswerAdapter extends RecyclerView.Adapter<AnswerAdapter.ViewHolder> {
     private Context mContext;
-    private List<AnswersBean> list;
+    private List<Answer> list;
     private boolean isMuti;
     private TestAdapter.OnItemClick onItemClick;
 
-    public AnswerAdapter(Context mContext, List<AnswersBean> list, boolean muti, TestAdapter.OnItemClick onItemClick) {
+    public AnswerAdapter(Context mContext, List<Answer> list, boolean muti, TestAdapter.OnItemClick onItemClick) {
         this.mContext = mContext;
         this.list = list;
         this.isMuti = muti;
@@ -36,8 +36,8 @@ public class AnswerAdapter extends RecyclerView.Adapter<AnswerAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        AnswersBean bean = list.get(position);
-//        holder.answerTitle.setText(bean.getAnswerTitle());
+        Answer bean = list.get(position);
+        holder.answerTitle.setText(bean.getAnswerTitle());
         if (isMuti) {
             holder.imageBtn.setImageResource(bean.isSelected() ? R.drawable.icon_selected1 : R.drawable.icon_select1);
         } else {
