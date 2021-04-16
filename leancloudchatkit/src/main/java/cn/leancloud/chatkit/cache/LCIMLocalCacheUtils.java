@@ -2,12 +2,9 @@ package cn.leancloud.chatkit.cache;
 
 
 import android.Manifest;
-import android.app.Activity;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.fragment.app.FragmentActivity;
@@ -19,11 +16,9 @@ import org.json.JSONObject;
 
 import java.io.Closeable;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -226,8 +221,10 @@ public class LCIMLocalCacheUtils {
                                         fos = new FileOutputStream(sdFile);
                                         os = new OutputStreamWriter(fos, "UTF-8");
                                         os.write(result);
-                                    } catch (Exception ex) {
-                                        ex.printStackTrace();
+                                        Toast.makeText(activity, "导出档案成功：" + sdFile.getPath(), Toast.LENGTH_LONG).show();
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        Toast.makeText(activity, "导出档案失败：" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                                     } finally {
                                         if (os != null) {
                                             os.close();
@@ -239,12 +236,11 @@ public class LCIMLocalCacheUtils {
                                         }
 
                                     }
-
                                 } else {
-                                    Log.e("arms", "文件导出失败：");
+                                    Toast.makeText(activity, "导出档案需要文件读写权限", Toast.LENGTH_SHORT).show();
                                 }
                             } catch (Exception e) {
-                                e.printStackTrace();
+                                Toast.makeText(activity, "导出档案失败：" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
