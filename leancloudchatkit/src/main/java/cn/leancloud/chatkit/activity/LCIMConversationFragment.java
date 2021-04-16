@@ -212,7 +212,6 @@ public class LCIMConversationFragment extends Fragment {
      * @param message
      */
     public void sendMessage(AVIMMessage message, boolean addToList) {
-
         AVIMMessageOption option = new AVIMMessageOption();
         if (message instanceof AVIMTextMessage) {
             AVIMTextMessage textMessage = (AVIMTextMessage) message;
