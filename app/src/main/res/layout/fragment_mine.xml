@@ -101,6 +101,7 @@
             android:paddingVertical="20dp"
             android:text="我的关注"
             android:textColor="#333"
+            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@+id/tvTests" />
 
         <TextView
