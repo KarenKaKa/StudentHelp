@@ -168,7 +168,7 @@ public class LCIMConversationFragment extends Fragment {
                 protected void internalDone0(String s, AVException e) {
                     if (null != e) {
                         LCIMLogUtils.logException(e);
-                        LCIMLocalCacheUtils.writeListIntoSDcard(requireActivity(), "学生档案", messageLists);
+                        LCIMLocalCacheUtils.writeListIntoSDcard(requireActivity(), imConversation.getCreator(), messageLists);
                     } else {
 
                         LCIMLocalCacheUtils.writeListIntoSDcard(requireActivity(), s, messageLists);

@@ -3,7 +3,7 @@ package com.consultation.studenthelp;
 import android.app.Application;
 
 import com.consultation.studenthelp.module.main.mine.MyConversationListActivity;
-import com.consultation.studenthelp.net.vo.DataList;
+import com.consultation.studenthelp.net.vo.DataListProvider;
 import com.consultation.studenthelp.utils.SpUtils;
 
 import org.litepal.LitePal;
@@ -72,6 +72,6 @@ public class StudentApp extends Application {
     }
 
     private void initDb() {
-        DataList.Companion.init();
+        DataListProvider.init();
     }
 }

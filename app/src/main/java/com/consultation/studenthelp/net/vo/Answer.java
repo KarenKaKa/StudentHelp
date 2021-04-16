@@ -12,7 +12,15 @@ public class Answer extends LitePalSupport {
     private int score = 0;//答案分值
     private Question question;
     @Column(ignore = true)
-    public boolean select;
+    private boolean isSelected;
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
 
     public Answer(String answerTitle, int score) {
         this.answerTitle = answerTitle;

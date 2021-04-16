@@ -14,6 +14,7 @@ import com.consultation.studenthelp.R;
 import com.consultation.studenthelp.base.BaseFragment;
 import com.consultation.studenthelp.databinding.FragmentHomeBinding;
 import com.consultation.studenthelp.module.main.news.NewsAdapter;
+import com.consultation.studenthelp.module.question.TestListActivity;
 import com.consultation.studenthelp.module.teachers.TeachersActivity;
 
 import java.util.ArrayList;
@@ -94,6 +95,8 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeVie
             Intent intent = new Intent(getActivity(), TeachersActivity.class);
             intent.putExtra("fromOrder", true);
             startActivity(intent);
+        } else if (id == R.id.tvTests) {
+            startActivity(new Intent(getActivity(), TestListActivity.class));
         }
     }
 

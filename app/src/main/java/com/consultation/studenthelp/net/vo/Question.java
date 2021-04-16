@@ -13,6 +13,13 @@ public class Question extends LitePalSupport {
     private Questionnaire questionnaire;
     private boolean multiSelect;
     private List<Answer> answerList;
+
+    public Question(String questionTitle, boolean multiSelect, List<Answer> answerList) {
+        this.questionTitle = questionTitle;
+        this.multiSelect = multiSelect;
+        this.answerList = answerList;
+    }
+
     public Question(String questionTitle, boolean multiSelect) {
         this.questionTitle = questionTitle;
         this.multiSelect = multiSelect;
