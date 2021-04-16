@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.consultation.studenthelp.R;
 import com.consultation.studenthelp.net.vo.MyQuestionsInfo;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import cn.leancloud.AVObject;
@@ -30,14 +31,14 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
     public RecordAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new ViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_record_list, parent, false));
     }
-
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     @Override
     public void onBindViewHolder(@NonNull RecordAdapter.ViewHolder holder, int position) {
         AVObject bean = list.get(position);
         holder.title.setText(bean.getString(MyQuestionsInfo.QUESTION_TITLE));
         holder.subTitle.setText("评分标准：" + bean.getString(MyQuestionsInfo.QUESTION_SCORINGCRITERIA));
         holder.score.setText("我的得分：" + bean.getNumber(MyQuestionsInfo.QUESTION_SCORES));
-        holder.time.setText(bean.getCreatedAtString());
+        holder.time.setText(dateFormat.format(bean.getCreatedAt()));
     }
 
     @Override

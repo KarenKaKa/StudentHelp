@@ -17,6 +17,7 @@ import com.consultation.studenthelp.net.vo.OrderInfo;
 import com.consultation.studenthelp.net.vo.UserInfo;
 import com.consultation.studenthelp.utils.UserSpUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import cn.leancloud.AVObject;
@@ -42,7 +43,7 @@ public class MessageListAdapter extends RecyclerView.Adapter<MessageListAdapter.
     public MessageListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new ViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_message_list, parent, false));
     }
-
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     @Override
     public void onBindViewHolder(@NonNull MessageListAdapter.ViewHolder holder, int position) {
         AVObject bean = list.get(position);
@@ -50,7 +51,7 @@ public class MessageListAdapter extends RecyclerView.Adapter<MessageListAdapter.
         String name = isTeacher ? ("留言学生：" + bean.getString(MessageInfo.MESSAGE_STUDENT_NAME)) :
                 ("留言老师：" + bean.getString(MessageInfo.MESSAGE_TEACHER_NAME));
         holder.name.setText(name);
-        holder.time.setText(bean.getCreatedAtString());
+        holder.time.setText(dateFormat.format(bean.getCreatedAt()));
         holder.content.setText(bean.getString(MessageInfo.MESSAGE_CONTENT));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
