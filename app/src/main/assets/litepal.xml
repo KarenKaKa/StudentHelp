@@ -24,8 +24,9 @@
     	</list>
     -->
     <list>
-        <mapping class="com.test.model.Reader" />
-        <mapping class="com.test.model.Magazine" />
+        <mapping class="com.consultation.studenthelp.net.vo.Questionnaire" />
+        <mapping class="com.consultation.studenthelp.net.vo.Question" />
+        <mapping class="com.consultation.studenthelp.net.vo.Answer" />
     </list>
 
     <!--
