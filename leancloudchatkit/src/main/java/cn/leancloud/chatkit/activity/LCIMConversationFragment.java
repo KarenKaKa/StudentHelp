@@ -98,6 +98,401 @@ public class LCIMConversationFragment extends Fragment {
 
     // 记录拍照等的文件路径
     protected String localCameraPath;
+    private List<AVIMMessage> messageLists;
+
+    public void setConversation(final AVIMConversation conversation) {
+        imConversation = conversation;
+        refreshLayout.setEnabled(true);
+        inputBottomBar.setTag(imConversation.getConversationId());
+        fetchMessages();
+        imConversation.read();
+        LCIMNotificationUtils.addTag(conversation.getConversationId());
+        if (!conversation.isTransient()) {
+            if (conversation.getMembers().size() == 0) {
+                conversation.fetchInfoInBackground(new AVIMConversationCallback() {
+                    @Override
+                    public void done(AVIMException e) {
+                        if (null != e) {
+                            LCIMLogUtils.logException(e);
+                            Toast.makeText(getContext(), "encounter network error, please try later.", Toast.LENGTH_SHORT);
+                        }
+                        itemAdapter.showUserName(conversation.getMembers().size() > 2);
+                    }
+                });
+            } else {
+                itemAdapter.showUserName(conversation.getMembers().size() > 2);
+            }
+        } else {
+            itemAdapter.showUserName(true);
+        }
+    }
+
+    /**
+     * 拉取消息，必须加入 conversation 后才能拉取消息
+     */
+    private void fetchMessages() {
+        imConversation.queryMessages(new AVIMMessagesQueryCallback() {
+            @Override
+            public void done(List<AVIMMessage> messageList, AVIMException e) {
+                if (filterException(e)) {
+                    messageLists = messageList;
+                    itemAdapter.setMessageList(messageList);
+                    recyclerView.setAdapter(itemAdapter);
+                    itemAdapter.setDeliveredAndReadMark(imConversation.getLastDeliveredAt(),
+                            imConversation.getLastReadAt());
+                    itemAdapter.notifyDataSetChanged();
+                    scrollToBottom();
+                    clearUnreadConut();
+                }
+            }
+        });
+    }
+
+    /**
+     * 滚动 recyclerView 到底部
+     */
+    private void scrollToBottom() {
+        layoutManager.scrollToPositionWithOffset(itemAdapter.getItemCount() - 1, 0);
+    }
+
+    private void clearUnreadConut() {
+        if (imConversation.getUnreadMessagesCount() > 0) {
+            imConversation.read();
+        }
+    }
+
+    public void exportFile() {
+        if (messageLists != null && !messageLists.isEmpty()) {
+            LCIMConversationUtils.getConversationName(imConversation, new AVCallback<String>() {
+                @Override
+                protected void internalDone0(String s, AVException e) {
+                    if (null != e) {
+                        LCIMLogUtils.logException(e);
+                        LCIMLocalCacheUtils.writeListIntoSDcard(requireActivity(), "学生档案", messageLists);
+                    } else {
+
+                        LCIMLocalCacheUtils.writeListIntoSDcard(requireActivity(), s, messageLists);
+                    }
+                }
+            });
+
+        }
+    }
+
+    /**
+     * 输入事件处理，接收后构造成 AVIMTextMessage 然后发送
+     * 因为不排除某些特殊情况会受到其他页面过来的无效消息，所以此处加了 tag 判断
+     */
+    public void onEvent(LCIMInputBottomBarTextEvent textEvent) {
+        if (null != imConversation && null != textEvent) {
+            if (!TextUtils.isEmpty(textEvent.sendContent) && imConversation.getConversationId().equals(textEvent.tag)) {
+                sendText(textEvent.sendContent);
+            }
+        }
+    }
+
+    /**
+     * 发送文本消息
+     *
+     * @param content
+     */
+    protected void sendText(String content) {
+        AVIMTextMessage message = new AVIMTextMessage();
+        message.setText(content);
+        sendMessage(message);
+    }
+
+    public void sendMessage(AVIMMessage message) {
+        sendMessage(message, true);
+    }
+
+    /**
+     * 发送消息
+     *
+     * @param message
+     */
+    public void sendMessage(AVIMMessage message, boolean addToList) {
+        if (addToList) {
+            itemAdapter.addMessage(message);
+        }
+        itemAdapter.notifyDataSetChanged();
+        scrollToBottom();
+
+        AVIMMessageOption option = new AVIMMessageOption();
+        if (message instanceof AVIMTextMessage) {
+            AVIMTextMessage textMessage = (AVIMTextMessage) message;
+            if (textMessage.getText().startsWith("tr:")) {
+                option.setTransient(true);
+            } else {
+                option.setReceipt(true);
+            }
+        } else {
+            option.setReceipt(true);
+        }
+        imConversation.sendMessage(message, option, new AVIMConversationCallback() {
+            @Override
+            public void done(AVIMException e) {
+                itemAdapter.notifyDataSetChanged();
+                if (null != e) {
+                    LCIMLogUtils.logException(e);
+                }
+            }
+        });
+    }
+
+    /**
+     * 处理推送过来的消息
+     * 同理，避免无效消息，此处加了 conversation id 判断
+     */
+    public void onEvent(LCIMIMTypeMessageEvent messageEvent) {
+        if (null != imConversation && null != messageEvent &&
+                imConversation.getConversationId().equals(messageEvent.conversation.getConversationId())) {
+            System.out.println("currentConv unreadCount=" + imConversation.getUnreadMessagesCount());
+            if (imConversation.getUnreadMessagesCount() > 0) {
+                paddingNewMessage(imConversation);
+            } else {
+                itemAdapter.addMessage(messageEvent.message);
+                itemAdapter.notifyDataSetChanged();
+                scrollToBottom();
+            }
+        }
+    }
+
+    private void paddingNewMessage(AVIMConversation currentConversation) {
+        if (null == currentConversation || currentConversation.getUnreadMessagesCount() < 1) {
+            return;
+        }
+        final int queryLimit = currentConversation.getUnreadMessagesCount() > 100 ? 100 : currentConversation.getUnreadMessagesCount();
+        currentConversation.queryMessages(queryLimit, new AVIMMessagesQueryCallback() {
+            @Override
+            public void done(List<AVIMMessage> list, AVIMException e) {
+                if (null != e) {
+                    return;
+                }
+                for (AVIMMessage m : list) {
+                    itemAdapter.addMessage(m);
+                }
+                itemAdapter.notifyDataSetChanged();
+                clearUnreadConut();
+            }
+        });
+    }
+
+    /**
+     * 重新发送已经发送失败的消息
+     */
+    public void onEvent(LCIMMessageResendEvent resendEvent) {
+        if (null != imConversation && null != resendEvent &&
+                null != resendEvent.message && imConversation.getConversationId().equals(resendEvent.message.getConversationId())) {
+            if (AVIMMessage.AVIMMessageStatus.AVIMMessageStatusFailed == resendEvent.message.getMessageStatus()
+                    && imConversation.getConversationId().equals(resendEvent.message.getConversationId())) {
+                sendMessage(resendEvent.message, false);
+            }
+        }
+    }
+
+    /**
+     * 处理输入栏发送过来的事件
+     *
+     * @param event
+     */
+    public void onEvent(LCIMInputBottomBarEvent event) {
+        if (null != imConversation && null != event && imConversation.getConversationId().equals(event.tag)) {
+            switch (event.eventAction) {
+                case LCIMInputBottomBarEvent.INPUTBOTTOMBAR_IMAGE_ACTION:
+                    dispatchPickPictureIntent();
+                    break;
+                case LCIMInputBottomBarEvent.INPUTBOTTOMBAR_CAMERA_ACTION:
+                    dispatchTakePictureIntent();
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    /**
+     * 发送 Intent 跳转到系统图库页面
+     */
+    private void dispatchPickPictureIntent() {
+        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK, null);
+        photoPickerIntent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+        startActivityForResult(photoPickerIntent, REQUEST_IMAGE_PICK);
+    }
+
+    /**
+     * 发送 Intent 跳转到系统拍照页面
+     */
+    private void dispatchTakePictureIntent() {
+
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            localCameraPath = LCIMPathUtils.getPicturePathByCurrentTime(getContext());
+            Uri imageUri = Uri.fromFile(new File(localCameraPath));
+            takePictureIntent.putExtra("return-data", false);
+            takePictureIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, imageUri);
+        } else {
+            localCameraPath = Environment.getExternalStorageDirectory() + "/images/" + System.currentTimeMillis() + ".jpg";
+            File photoFile = new File(localCameraPath);
+
+            Uri photoURI = FileProvider.getUriForFile(this.getContext(),
+                    this.getContext().getPackageName() + ".provider", photoFile);
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                    photoURI);
+        }
+        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
+    /**
+     * 处理录音事件
+     *
+     * @param recordEvent
+     */
+    public void onEvent(LCIMInputBottomBarRecordEvent recordEvent) {
+        if (null != imConversation && null != recordEvent &&
+                !TextUtils.isEmpty(recordEvent.audioPath) &&
+                imConversation.getConversationId().equals(recordEvent.tag)) {
+            if (recordEvent.audioDuration > 0)
+                sendAudio(recordEvent.audioPath);
+        }
+    }
+
+    /**
+     * 发送语音消息
+     *
+     * @param audioPath
+     */
+    protected void sendAudio(String audioPath) {
+        try {
+            AVIMAudioMessage audioMessage = new AVIMAudioMessage(audioPath);
+            sendMessage(audioMessage);
+        } catch (IOException e) {
+            LCIMLogUtils.logException(e);
+        }
+    }
+
+    /**
+     * 更新对方已读的位置事件
+     *
+     * @param readEvent
+     */
+    public void onEvent(LCIMConversationReadStatusEvent readEvent) {
+        if (null != imConversation && null != readEvent &&
+                imConversation.getConversationId().equals(readEvent.conversationId)) {
+            itemAdapter.setDeliveredAndReadMark(imConversation.getLastDeliveredAt(),
+                    imConversation.getLastReadAt());
+            itemAdapter.notifyDataSetChanged();
+        }
+    }
+
+    public void onEvent(final LCIMMessageUpdateEvent event) {
+        if (null != imConversation && null != event &&
+                null != event.message && imConversation.getConversationId().equals(event.message.getConversationId())) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("操作").setItems(new String[]{"撤回", "修改消息内容"}, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (0 == which) {
+                        recallMessage(event.message);
+                    } else if (1 == which) {
+                        showUpdateMessageDialog(event.message);
+                    }
+                }
+            });
+            builder.create().show();
+        }
+    }
+
+    private void recallMessage(AVIMMessage message) {
+        imConversation.recallMessage(message, new AVIMMessageRecalledCallback() {
+            @Override
+            public void done(AVIMRecalledMessage recalledMessage, AVException e) {
+                if (null == e) {
+                    itemAdapter.updateMessage(recalledMessage);
+                } else {
+                    Toast.makeText(getActivity(), "撤回失败", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void showUpdateMessageDialog(final AVIMMessage message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        final EditText editText = new EditText(getActivity());
+        builder.setView(editText);
+        builder.setTitle("修改消息内容");
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.setPositiveButton("提交", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                String content = editText.getText().toString();
+                updateMessage(message, content);
+            }
+        });
+        builder.show();
+    }
+
+    private void updateMessage(AVIMMessage message, String newContent) {
+        AVIMTextMessage textMessage = new AVIMTextMessage();
+        textMessage.setText(newContent);
+        imConversation.updateMessage(message, textMessage, new AVIMMessageUpdatedCallback() {
+            @Override
+            public void done(AVIMMessage message, AVException e) {
+                if (null == e) {
+                    itemAdapter.updateMessage(message);
+                } else {
+                    Toast.makeText(getActivity(), "更新失败", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    public void onEvent(final LCIMMessageUpdatedEvent event) {
+        if (null != imConversation && null != event &&
+                null != event.message && imConversation.getConversationId().equals(event.message.getConversationId())) {
+            itemAdapter.updateMessage(event.message);
+        }
+    }
+
+    public void onEvent(final LCIMOfflineMessageCountChangeEvent event) {
+        if (null == event || null == event.conversation || null == event.conversation) {
+            return;
+        }
+        if (!imConversation.getConversationId().equals(event.conversation.getConversationId())) {
+            return;
+        }
+        if (event.conversation.getUnreadMessagesCount() < 1) {
+            return;
+        }
+        paddingNewMessage(event.conversation);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        System.out.println("requestCode=" + requestCode + ", resultCode=" + resultCode);
+        if (Activity.RESULT_OK == resultCode) {
+            switch (requestCode) {
+                case REQUEST_IMAGE_CAPTURE:
+                    sendImage(localCameraPath);
+                    break;
+                case REQUEST_IMAGE_PICK:
+                    sendImage(getRealPathFromURI(getActivity(), data.getData()));
+                    break;
+                default:
+                    break;
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
     @Nullable
     @Override
@@ -148,10 +543,6 @@ public class LCIMConversationFragment extends Fragment {
         });
     }
 
-    protected LCIMChatAdapter getAdpter() {
-        return new LCIMChatAdapter();
-    }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -191,340 +582,30 @@ public class LCIMConversationFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    public void setConversation(final AVIMConversation conversation) {
-        imConversation = conversation;
-        refreshLayout.setEnabled(true);
-        inputBottomBar.setTag(imConversation.getConversationId());
-        fetchMessages();
-        imConversation.read();
-        LCIMNotificationUtils.addTag(conversation.getConversationId());
-        if (!conversation.isTransient()) {
-            if (conversation.getMembers().size() == 0) {
-                conversation.fetchInfoInBackground(new AVIMConversationCallback() {
-                    @Override
-                    public void done(AVIMException e) {
-                        if (null != e) {
-                            LCIMLogUtils.logException(e);
-                            Toast.makeText(getContext(), "encounter network error, please try later.", Toast.LENGTH_SHORT);
-                        }
-                        itemAdapter.showUserName(conversation.getMembers().size() > 2);
-                    }
-                });
-            } else {
-                itemAdapter.showUserName(conversation.getMembers().size() > 2);
-            }
-        } else {
-            itemAdapter.showUserName(true);
+    private boolean filterException(Exception e) {
+        if (null != e) {
+            LCIMLogUtils.logException(e);
+            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
+        return (null == e);
+    }
+
+    protected LCIMChatAdapter getAdpter() {
+        return new LCIMChatAdapter();
     }
 
     /**
-     * 拉取消息，必须加入 conversation 后才能拉取消息
-     */
-    private void fetchMessages() {
-        imConversation.queryMessages(new AVIMMessagesQueryCallback() {
-            @Override
-            public void done(List<AVIMMessage> messageList, AVIMException e) {
-                if (filterException(e)) {
-                    messageLists = messageList;
-                    itemAdapter.setMessageList(messageList);
-                    recyclerView.setAdapter(itemAdapter);
-                    itemAdapter.setDeliveredAndReadMark(imConversation.getLastDeliveredAt(),
-                            imConversation.getLastReadAt());
-                    itemAdapter.notifyDataSetChanged();
-                    scrollToBottom();
-                    clearUnreadConut();
-                }
-            }
-        });
-    }
-
-    private List<AVIMMessage> messageLists;
-
-    public void exportFile() {
-        if (messageLists != null && !messageLists.isEmpty()) {
-            LCIMConversationUtils.getConversationName(imConversation, new AVCallback<String>() {
-                @Override
-                protected void internalDone0(String s, AVException e) {
-                    if (null != e) {
-                        LCIMLogUtils.logException(e);
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                LCIMLocalCacheUtils.writeListIntoSDcard(getContext(),"学生档案", messageLists);
-                            }
-                        }).start();
-                    } else {
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                LCIMLocalCacheUtils.writeListIntoSDcard(getContext(),s, messageLists);
-                            }
-                        }).start();
-                    }
-                }
-            });
-
-        }
-    }
-
-    /**
-     * 输入事件处理，接收后构造成 AVIMTextMessage 然后发送
-     * 因为不排除某些特殊情况会受到其他页面过来的无效消息，所以此处加了 tag 判断
-     */
-    public void onEvent(LCIMInputBottomBarTextEvent textEvent) {
-        if (null != imConversation && null != textEvent) {
-            if (!TextUtils.isEmpty(textEvent.sendContent) && imConversation.getConversationId().equals(textEvent.tag)) {
-                sendText(textEvent.sendContent);
-            }
-        }
-    }
-
-    /**
-     * 处理推送过来的消息
-     * 同理，避免无效消息，此处加了 conversation id 判断
-     */
-    public void onEvent(LCIMIMTypeMessageEvent messageEvent) {
-        if (null != imConversation && null != messageEvent &&
-                imConversation.getConversationId().equals(messageEvent.conversation.getConversationId())) {
-            System.out.println("currentConv unreadCount=" + imConversation.getUnreadMessagesCount());
-            if (imConversation.getUnreadMessagesCount() > 0) {
-                paddingNewMessage(imConversation);
-            } else {
-                itemAdapter.addMessage(messageEvent.message);
-                itemAdapter.notifyDataSetChanged();
-                scrollToBottom();
-            }
-        }
-    }
-
-    /**
-     * 重新发送已经发送失败的消息
-     */
-    public void onEvent(LCIMMessageResendEvent resendEvent) {
-        if (null != imConversation && null != resendEvent &&
-                null != resendEvent.message && imConversation.getConversationId().equals(resendEvent.message.getConversationId())) {
-            if (AVIMMessage.AVIMMessageStatus.AVIMMessageStatusFailed == resendEvent.message.getMessageStatus()
-                    && imConversation.getConversationId().equals(resendEvent.message.getConversationId())) {
-                sendMessage(resendEvent.message, false);
-            }
-        }
-    }
-
-    /**
-     * 处理输入栏发送过来的事件
+     * 发送图片消息
+     * TODO 上传的图片最好要压缩一下
      *
-     * @param event
+     * @param imagePath
      */
-    public void onEvent(LCIMInputBottomBarEvent event) {
-        if (null != imConversation && null != event && imConversation.getConversationId().equals(event.tag)) {
-            switch (event.eventAction) {
-                case LCIMInputBottomBarEvent.INPUTBOTTOMBAR_IMAGE_ACTION:
-                    dispatchPickPictureIntent();
-                    break;
-                case LCIMInputBottomBarEvent.INPUTBOTTOMBAR_CAMERA_ACTION:
-                    dispatchTakePictureIntent();
-                    break;
-                default:
-                    break;
-            }
+    protected void sendImage(String imagePath) {
+        try {
+            sendMessage(new AVIMImageMessage(imagePath));
+        } catch (IOException e) {
+            LCIMLogUtils.logException(e);
         }
-    }
-
-    /**
-     * 处理录音事件
-     *
-     * @param recordEvent
-     */
-    public void onEvent(LCIMInputBottomBarRecordEvent recordEvent) {
-        if (null != imConversation && null != recordEvent &&
-                !TextUtils.isEmpty(recordEvent.audioPath) &&
-                imConversation.getConversationId().equals(recordEvent.tag)) {
-            if (recordEvent.audioDuration > 0)
-                sendAudio(recordEvent.audioPath);
-        }
-    }
-
-    /**
-     * 更新对方已读的位置事件
-     *
-     * @param readEvent
-     */
-    public void onEvent(LCIMConversationReadStatusEvent readEvent) {
-        if (null != imConversation && null != readEvent &&
-                imConversation.getConversationId().equals(readEvent.conversationId)) {
-            itemAdapter.setDeliveredAndReadMark(imConversation.getLastDeliveredAt(),
-                    imConversation.getLastReadAt());
-            itemAdapter.notifyDataSetChanged();
-        }
-    }
-
-    public void onEvent(final LCIMMessageUpdateEvent event) {
-        if (null != imConversation && null != event &&
-                null != event.message && imConversation.getConversationId().equals(event.message.getConversationId())) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setTitle("操作").setItems(new String[]{"撤回", "修改消息内容"}, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    if (0 == which) {
-                        recallMessage(event.message);
-                    } else if (1 == which) {
-                        showUpdateMessageDialog(event.message);
-                    }
-                }
-            });
-            builder.create().show();
-        }
-    }
-
-    public void onEvent(final LCIMMessageUpdatedEvent event) {
-        if (null != imConversation && null != event &&
-                null != event.message && imConversation.getConversationId().equals(event.message.getConversationId())) {
-            itemAdapter.updateMessage(event.message);
-        }
-    }
-
-    public void onEvent(final LCIMOfflineMessageCountChangeEvent event) {
-        if (null == event || null == event.conversation || null == event.conversation) {
-            return;
-        }
-        if (!imConversation.getConversationId().equals(event.conversation.getConversationId())) {
-            return;
-        }
-        if (event.conversation.getUnreadMessagesCount() < 1) {
-            return;
-        }
-        paddingNewMessage(event.conversation);
-    }
-
-    private void paddingNewMessage(AVIMConversation currentConversation) {
-        if (null == currentConversation || currentConversation.getUnreadMessagesCount() < 1) {
-            return;
-        }
-        final int queryLimit = currentConversation.getUnreadMessagesCount() > 100 ? 100 : currentConversation.getUnreadMessagesCount();
-        currentConversation.queryMessages(queryLimit, new AVIMMessagesQueryCallback() {
-            @Override
-            public void done(List<AVIMMessage> list, AVIMException e) {
-                if (null != e) {
-                    return;
-                }
-                for (AVIMMessage m : list) {
-                    itemAdapter.addMessage(m);
-                }
-                itemAdapter.notifyDataSetChanged();
-                clearUnreadConut();
-            }
-        });
-    }
-
-    private void showUpdateMessageDialog(final AVIMMessage message) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        final EditText editText = new EditText(getActivity());
-        builder.setView(editText);
-        builder.setTitle("修改消息内容");
-        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        builder.setPositiveButton("提交", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                String content = editText.getText().toString();
-                updateMessage(message, content);
-            }
-        });
-        builder.show();
-    }
-
-    private void recallMessage(AVIMMessage message) {
-        imConversation.recallMessage(message, new AVIMMessageRecalledCallback() {
-            @Override
-            public void done(AVIMRecalledMessage recalledMessage, AVException e) {
-                if (null == e) {
-                    itemAdapter.updateMessage(recalledMessage);
-                } else {
-                    Toast.makeText(getActivity(), "撤回失败", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
-
-    private void updateMessage(AVIMMessage message, String newContent) {
-        AVIMTextMessage textMessage = new AVIMTextMessage();
-        textMessage.setText(newContent);
-        imConversation.updateMessage(message, textMessage, new AVIMMessageUpdatedCallback() {
-            @Override
-            public void done(AVIMMessage message, AVException e) {
-                if (null == e) {
-                    itemAdapter.updateMessage(message);
-                } else {
-                    Toast.makeText(getActivity(), "更新失败", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
-
-    /**
-     * 发送 Intent 跳转到系统拍照页面
-     */
-    private void dispatchTakePictureIntent() {
-
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-            localCameraPath = LCIMPathUtils.getPicturePathByCurrentTime(getContext());
-            Uri imageUri = Uri.fromFile(new File(localCameraPath));
-            takePictureIntent.putExtra("return-data", false);
-            takePictureIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, imageUri);
-        } else {
-            localCameraPath = Environment.getExternalStorageDirectory() + "/images/" + System.currentTimeMillis() + ".jpg";
-            File photoFile = new File(localCameraPath);
-
-            Uri photoURI = FileProvider.getUriForFile(this.getContext(),
-                    this.getContext().getPackageName() + ".provider", photoFile);
-            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-                    photoURI);
-        }
-        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-        }
-    }
-
-    /**
-     * 发送 Intent 跳转到系统图库页面
-     */
-    private void dispatchPickPictureIntent() {
-        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK, null);
-        photoPickerIntent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-        startActivityForResult(photoPickerIntent, REQUEST_IMAGE_PICK);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        System.out.println("requestCode=" + requestCode + ", resultCode=" + resultCode);
-        if (Activity.RESULT_OK == resultCode) {
-            switch (requestCode) {
-                case REQUEST_IMAGE_CAPTURE:
-                    sendImage(localCameraPath);
-                    break;
-                case REQUEST_IMAGE_PICK:
-                    sendImage(getRealPathFromURI(getActivity(), data.getData()));
-                    break;
-                default:
-                    break;
-            }
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    /**
-     * 滚动 recyclerView 到底部
-     */
-    private void scrollToBottom() {
-        layoutManager.scrollToPositionWithOffset(itemAdapter.getItemCount() - 1, 0);
     }
 
     /**
@@ -554,97 +635,6 @@ public class LCIMConversationFragment extends Fragment {
                     cursor.close();
                 }
             }
-        }
-    }
-
-    /**
-     * 发送文本消息
-     *
-     * @param content
-     */
-    protected void sendText(String content) {
-        AVIMTextMessage message = new AVIMTextMessage();
-        message.setText(content);
-        sendMessage(message);
-    }
-
-    /**
-     * 发送图片消息
-     * TODO 上传的图片最好要压缩一下
-     *
-     * @param imagePath
-     */
-    protected void sendImage(String imagePath) {
-        try {
-            sendMessage(new AVIMImageMessage(imagePath));
-        } catch (IOException e) {
-            LCIMLogUtils.logException(e);
-        }
-    }
-
-    /**
-     * 发送语音消息
-     *
-     * @param audioPath
-     */
-    protected void sendAudio(String audioPath) {
-        try {
-            AVIMAudioMessage audioMessage = new AVIMAudioMessage(audioPath);
-            sendMessage(audioMessage);
-        } catch (IOException e) {
-            LCIMLogUtils.logException(e);
-        }
-    }
-
-    public void sendMessage(AVIMMessage message) {
-        sendMessage(message, true);
-    }
-
-    /**
-     * 发送消息
-     *
-     * @param message
-     */
-    public void sendMessage(AVIMMessage message, boolean addToList) {
-        if (addToList) {
-            itemAdapter.addMessage(message);
-        }
-        itemAdapter.notifyDataSetChanged();
-        scrollToBottom();
-
-        AVIMMessageOption option = new AVIMMessageOption();
-        if (message instanceof AVIMTextMessage) {
-            AVIMTextMessage textMessage = (AVIMTextMessage) message;
-            if (textMessage.getText().startsWith("tr:")) {
-                option.setTransient(true);
-            } else {
-                option.setReceipt(true);
-            }
-        } else {
-            option.setReceipt(true);
-        }
-        imConversation.sendMessage(message, option, new AVIMConversationCallback() {
-            @Override
-            public void done(AVIMException e) {
-                itemAdapter.notifyDataSetChanged();
-                if (null != e) {
-                    LCIMLogUtils.logException(e);
-                }
-            }
-        });
-    }
-
-    private boolean filterException(Exception e) {
-        if (null != e) {
-            LCIMLogUtils.logException(e);
-            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-        return (null == e);
-    }
-
-    private void clearUnreadConut() {
-        if (imConversation.getUnreadMessagesCount() > 0) {
-            imConversation.read();
         }
     }
 }

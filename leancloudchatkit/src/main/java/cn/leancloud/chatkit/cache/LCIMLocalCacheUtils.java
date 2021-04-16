@@ -1,12 +1,21 @@
 package cn.leancloud.chatkit.cache;
 
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.fragment.app.FragmentActivity;
+
+import com.permissionx.guolindev.PermissionX;
+import com.permissionx.guolindev.callback.RequestCallback;
+
+import org.json.JSONObject;
 
 import java.io.Closeable;
 import java.io.File;
@@ -15,14 +24,19 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStreamWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import cn.leancloud.chatkit.LCChatKit;
+import cn.leancloud.chatkit.LCChatKitUser;
 import cn.leancloud.im.v2.AVIMMessage;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
@@ -55,26 +69,6 @@ public class LCIMLocalCacheUtils {
         downloadCallBackMap = new HashMap<String, ArrayList<DownLoadCallback>>();
         isDownloadingFile = new HashSet<String>();
         okHttpClient = new OkHttpClient();
-    }
-
-    private static synchronized void addDownloadCallback(String path, DownLoadCallback callback) {
-        if (null != callback) {
-            if (downloadCallBackMap.containsKey(path)) {
-                downloadCallBackMap.get(path).add(callback);
-            } else {
-                downloadCallBackMap.put(path, new ArrayList<DownLoadCallback>(Arrays.asList(callback)));
-            }
-        }
-    }
-
-    private static synchronized void executeDownloadCallBack(String path, Exception e) {
-        if (downloadCallBackMap.containsKey(path)) {
-            ArrayList<DownLoadCallback> callbacks = downloadCallBackMap.get(path);
-            downloadCallBackMap.remove(path);
-            for (DownLoadCallback callback : callbacks) {
-                callback.done(e);
-            }
-        }
     }
 
     /**
@@ -133,6 +127,21 @@ public class LCIMLocalCacheUtils {
         }
     }
 
+    private static boolean isFileExist(String localPath) {
+        File file = new File(localPath);
+        return file.exists();
+    }
+
+    private static synchronized void addDownloadCallback(String path, DownLoadCallback callback) {
+        if (null != callback) {
+            if (downloadCallBackMap.containsKey(path)) {
+                downloadCallBackMap.get(path).add(callback);
+            } else {
+                downloadCallBackMap.put(path, new ArrayList<DownLoadCallback>(Arrays.asList(callback)));
+            }
+        }
+    }
+
     private static Exception downloadWithOKHttp(String url, String localPath) {
         File file = new File(localPath);
         Exception result = null;
@@ -164,6 +173,16 @@ public class LCIMLocalCacheUtils {
         return result;
     }
 
+    private static synchronized void executeDownloadCallBack(String path, Exception e) {
+        if (downloadCallBackMap.containsKey(path)) {
+            ArrayList<DownLoadCallback> callbacks = downloadCallBackMap.get(path);
+            downloadCallBackMap.remove(path);
+            for (DownLoadCallback callback : callbacks) {
+                callback.done(e);
+            }
+        }
+    }
+
     private static void closeQuietly(Closeable closeable) {
         try {
             closeable.close();
@@ -171,48 +190,70 @@ public class LCIMLocalCacheUtils {
         }
     }
 
-    private static boolean isFileExist(String localPath) {
-        File file = new File(localPath);
-        return file.exists();
-    }
+    public static void writeListIntoSDcard(FragmentActivity activity, String fileName, List<AVIMMessage> list) {
+        PermissionX.init(activity).permissions(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .request(new RequestCallback() {
+                    @Override
+                    public void onResult(boolean allGranted, List<String> grantedList, List<String> deniedList) {
+                        if (allGranted) {
+                            try {
+                                if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                                    File sdCardDir = Environment.getExternalStorageDirectory();//获取sd卡目录
+                                    File sdFile = new File(sdCardDir, fileName + ".txt");
+                                    if (!sdFile.exists()) {
+                                        sdFile.createNewFile();
+                                    }
+                                    List<LCChatKitUser> allUsers = LCChatKit.getInstance().getProfileProvider().getAllUsers();
+                                    String result = "";
+                                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                    for (AVIMMessage message : list) {
+                                        result += ("时间：" + format.format(new Date(message.getTimestamp())) + "\n");
+                                        if (allUsers.isEmpty()) {
+                                            result += ("发送者ID：" + message.getFrom() + "\n");
+                                        } else {
+                                            for (LCChatKitUser user : allUsers) {
+                                                if (user.getUserId().equals(message.getFrom())) {
+                                                    result += ("发送者：" + user.getName() + "\n");
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        result += ("内容：" + new JSONObject(message.getContent()).optString("_lctext") + "\n\n");
+                                    }
+                                    OutputStreamWriter os = null;
+                                    FileOutputStream fos = null;
+                                    try {
+                                        fos = new FileOutputStream(sdFile);
+                                        os = new OutputStreamWriter(fos, "UTF-8");
+                                        os.write(result);
+                                    } catch (Exception ex) {
+                                        ex.printStackTrace();
+                                    } finally {
+                                        if (os != null) {
+                                            os.close();
+                                            os = null;
+                                        }
+                                        if (fos != null) {
+                                            fos.close();
+                                            fos = null;
+                                        }
 
+                                    }
+
+                                } else {
+                                    Log.e("arms", "文件导出失败：");
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                });
+
+    }
 
     public static class DownLoadCallback {
         public void done(Exception e) {
-        }
-    }
-
-
-    public static boolean writeListIntoSDcard(Context context, String fileName, List<AVIMMessage> list) {
-        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            List<String> fileList = new ArrayList<>();
-            for (AVIMMessage avimMessage : list) {
-                fileList.add(avimMessage.toJSONString());
-            }
-            File sdCardDir = Environment.getExternalStorageDirectory();//获取sd卡目录
-            File sdFile = new File(sdCardDir, fileName+".txt");
-            try {
-                FileOutputStream fos = new FileOutputStream(sdFile);
-                ObjectOutputStream oos = new ObjectOutputStream(fos);
-                oos.writeObject(fileList);//写入
-                fos.close();
-                oos.close();
-//                Toast.makeText(context, "文件导出成功：" + sdFile.getPath(), Toast.LENGTH_SHORT).show();
-                Log.e("arms","文件导出成功：" + sdFile.getPath());
-                return true;
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-//                Toast.makeText(context, "文件导出失败：" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.e("arms","文件导出失败：" + e.toString());
-                return false;
-            } catch (IOException e) {
-                e.printStackTrace();
-//                Toast.makeText(context, "文件导出失败：" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.e("arms","文件导出失败：" + e.toString());
-                return false;
-            }
-        } else {
-            return false;
         }
     }
 }
