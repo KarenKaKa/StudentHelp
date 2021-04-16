@@ -16,9 +16,26 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:supportsRtl="true"
         android:theme="@style/Theme.StudentHelp">
-        <activity android:name=".module.question.TestActivity"></activity>
-        <activity android:name=".module.leavemessage.MyLeaveMessageActivity" />
-        <activity android:name=".module.leavemessage.LeaveMessageActivity" />
+        <activity
+            android:name=".module.question.TestListActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.question.TestActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.leavemessage.MyLeaveMessageActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.leavemessage.LeaveMessageActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.question.MyTestListActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".module.teacher.MyArticlesActivity"
             android:configChanges="orientation|screenSize"

@@ -13,7 +13,7 @@ public class DataListProvider {
             List<Questionnaire> questionnaires = List.of(new Questionnaire("心理健康教育调查表", "欢迎大家参加本次答题", "15分以上及格",
                             List.of(new Question("你的性别", false, List.of(new Answer("男", 1), new Answer("女", 1))),
                                     new Question("你认为自己是什么性格的人？", false, List.of(new Answer("乐观开朗，积极向上", 3), new Answer("随遇而安，处事淡漠", 2), new Answer("急躁，易焦虑", 1))),
-                                    new Question("你有曾经或者现在被哪些情绪困扰？", false, List.of(new Answer("自卑", 0), new Answer("焦虑", 0), new Answer("愤怒", 0), new Answer("压抑", 0))),
+                                    new Question("你有曾经或者现在被哪些情绪困扰？", true, List.of(new Answer("自卑", 0), new Answer("焦虑", 0), new Answer("愤怒", 0), new Answer("压抑", 0))),
                                     new Question("你是否经常有这些焦虑？", false, List.of(new Answer("总是", 0), new Answer("经常", 1), new Answer("偶尔", 2), new Answer("基本没", 3))),
                                     new Question("你在情绪不安时是否有过极端想法？", false, List.of(new Answer("有", 0), new Answer("偶尔有", 1), new Answer("无", 2))),
                                     new Question("你认为自己的情绪自我调节能力如何", false, List.of(new Answer("很强", 4), new Answer("不错", 3), new Answer("一般", 2), new Answer("差", 0))),

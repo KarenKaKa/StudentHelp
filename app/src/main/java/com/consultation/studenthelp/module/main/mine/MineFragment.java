@@ -15,6 +15,7 @@ import com.consultation.studenthelp.databinding.FragmentMineBinding;
 import com.consultation.studenthelp.module.leavemessage.MyLeaveMessageActivity;
 import com.consultation.studenthelp.module.login.LoginActivity;
 import com.consultation.studenthelp.module.main.order.OrderListActivity;
+import com.consultation.studenthelp.module.question.MyTestListActivity;
 import com.consultation.studenthelp.module.userinfo.EditUserInfoActivity;
 import com.consultation.studenthelp.utils.UserSpUtils;
 
@@ -77,7 +78,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
         } else if (id == R.id.tvAppointment) {
             startActivity(new Intent(getActivity(), OrderListActivity.class));
         } else if (id == R.id.tvTests) {
-            toast("测试记录");
+            startActivity(new Intent(getActivity(), MyTestListActivity.class));
         } else if (id == R.id.tvTeachers) {
             toast("我喜欢的老师");
         } else if (id == R.id.tvLogout) {

@@ -14,7 +14,7 @@ import com.consultation.studenthelp.R;
 import com.consultation.studenthelp.base.BaseFragment;
 import com.consultation.studenthelp.databinding.FragmentHomeBinding;
 import com.consultation.studenthelp.module.main.news.NewsAdapter;
-import com.consultation.studenthelp.module.question.TestActivity;
+import com.consultation.studenthelp.module.question.TestListActivity;
 import com.consultation.studenthelp.module.teachers.TeachersActivity;
 
 import java.util.ArrayList;
@@ -96,8 +96,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeVie
             intent.putExtra("fromOrder", true);
             startActivity(intent);
         } else if (id == R.id.tvTests) {
-            //TODO 测试
-            startActivity(new Intent(getActivity(), TestActivity.class));
+            startActivity(new Intent(getActivity(), TestListActivity.class));
         }
     }
 
