@@ -77,4 +77,5 @@ dependencies {
     implementation project(':leancloudchatkit')
     implementation project(path: ':imagepicker')
     implementation project(path: ':ucrop')
+    implementation 'org.litepal.guolindev:core:3.2.3'
 }
