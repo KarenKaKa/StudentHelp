@@ -2,6 +2,7 @@ package com.consultation.studenthelp.module.main.news;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.consultation.studenthelp.R;
 import com.consultation.studenthelp.net.vo.ArticlesInfo;
+import com.consultation.studenthelp.net.vo.Question;
+import com.consultation.studenthelp.net.vo.Questionnaire;
+import com.consultation.studenthelp.utils.DataUtils;
+
+import org.litepal.LitePal;
+import org.litepal.crud.LitePalSupport;
 
 import java.text.SimpleDateFormat;
 import java.util.List;

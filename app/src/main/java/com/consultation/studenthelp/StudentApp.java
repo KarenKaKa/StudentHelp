@@ -2,10 +2,11 @@ package com.consultation.studenthelp;
 
 import android.app.Application;
 
-import com.consultation.studenthelp.module.main.MainActivity;
 import com.consultation.studenthelp.module.main.mine.MyConversationListActivity;
-import com.consultation.studenthelp.module.teacher.TeacherMainActivity;
+import com.consultation.studenthelp.net.vo.DataList;
 import com.consultation.studenthelp.utils.SpUtils;
+
+import org.litepal.LitePal;
 
 import cn.leancloud.AVInstallation;
 import cn.leancloud.AVLogger;
@@ -30,6 +31,8 @@ public class StudentApp extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
+        LitePal.initialize(this);
+        initDb();
         SpUtils.getInstance(this, "spConfig");
 
         // 在 AVOSCloud.initialize() 之前调用
@@ -66,5 +69,9 @@ public class StudentApp extends Application {
 
             }
         });
+    }
+
+    private void initDb() {
+        DataList.Companion.init();
     }
 }
