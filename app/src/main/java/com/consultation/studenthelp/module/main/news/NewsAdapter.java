@@ -18,7 +18,7 @@ import java.util.List;
 
 import cn.leancloud.AVObject;
 
-public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.HomeTeacherViewHolder> {
+public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     private Context mContext;
     private List<AVObject> list;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -30,12 +30,12 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.HomeTeacherVie
 
     @NonNull
     @Override
-    public HomeTeacherViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new HomeTeacherViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_home_news, parent, false));
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new ViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_home_news, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull HomeTeacherViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         AVObject bean = list.get(position);
         holder.title.setText(bean.getString(ArticlesInfo.NEWS_TITLE));
         holder.content.setText(bean.getString(ArticlesInfo.NEWS_CONTENT));
@@ -56,13 +56,13 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.HomeTeacherVie
         return list.size();
     }
 
-    public static class HomeTeacherViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         private TextView title;
         private TextView teacher;
         private TextView date;
         private TextView content;
 
-        public HomeTeacherViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.title);
             teacher = itemView.findViewById(R.id.teacherName);
