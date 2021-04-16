@@ -72,12 +72,29 @@ public class EditUserInfoActivity extends BaseActivity implements View.OnClickLi
             @Override
             public void onNext(@NonNull List<AVObject> labels) {
                 sortList.addAll(labels);
-                AVUser user = AVUser.getCurrentUser();
-                String label = user.getString(UserInfo.USER_LABELS);
-                if (!TextUtils.isEmpty(label)) {
-                    adapter.refreshSelected(label.split(","));
-                }
-                adapter.notifyDataSetChanged();
+
+                AVQuery<AVUser> query = AVUser.getQuery();
+                query.whereEqualTo(UserInfo.OBJECT_ID, AVUser.getCurrentUser().getObjectId());
+                query.findInBackground().subscribe(new Observer<List<AVUser>>() {
+                    public void onSubscribe(Disposable disposable) {
+                    }
+
+                    public void onNext(List<AVUser> users) {
+                        if (users != null && users.size() > 0) {
+                            String label = users.get(0).getString(UserInfo.USER_LABELS);
+                            if (!TextUtils.isEmpty(label)) {
+                                adapter.refreshSelected(label.split(","));
+                            }
+                        }
+                    }
+
+                    public void onError(Throwable throwable) {
+                    }
+
+                    public void onComplete() {
+                        adapter.notifyDataSetChanged();
+                    }
+                });
             }
 
             @Override

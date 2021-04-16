@@ -39,7 +39,7 @@ public class EditLablesAdapter extends RecyclerView.Adapter<EditLablesAdapter.Vi
         for (String s : selected) {
             builder.append(s).append(",");
         }
-        return builder.substring(0, builder.length() - 2);
+        return builder.substring(0, builder.length() - 1);
     }
 
     @NonNull

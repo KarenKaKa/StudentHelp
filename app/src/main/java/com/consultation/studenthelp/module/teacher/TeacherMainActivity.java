@@ -3,6 +3,7 @@ package com.consultation.studenthelp.module.teacher;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CompoundButton;
 
 import androidx.databinding.DataBindingUtil;
 
@@ -15,12 +16,17 @@ import com.consultation.studenthelp.module.login.LoginActivity;
 import com.consultation.studenthelp.module.main.mine.MyConversationListActivity;
 import com.consultation.studenthelp.module.main.order.OrderListActivity;
 import com.consultation.studenthelp.module.userinfo.EditUserInfoActivity;
+import com.consultation.studenthelp.net.vo.UserInfo;
 import com.consultation.studenthelp.utils.UserSpUtils;
 
+import cn.leancloud.AVObject;
+import cn.leancloud.AVUser;
 import cn.leancloud.chatkit.LCChatKit;
 import cn.leancloud.im.v2.AVIMClient;
 import cn.leancloud.im.v2.AVIMException;
 import cn.leancloud.im.v2.callback.AVIMClientCallback;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 public class TeacherMainActivity extends BaseActivity implements View.OnClickListener {
     private ActivityTeacherMainBinding binding;
@@ -41,6 +47,28 @@ public class TeacherMainActivity extends BaseActivity implements View.OnClickLis
         binding.tvPubArt.setOnClickListener(this);
 
         binding.name.setText(UserSpUtils.getUserName());
+
+
+        binding.switchBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                AVUser user = AVUser.currentUser();
+                user.put(UserInfo.USER_AVAILABLE, b);
+                user.saveInBackground().subscribe(new Observer<AVObject>() {
+                    public void onSubscribe(Disposable disposable) {
+                    }
+
+                    public void onNext(AVObject avUser) {
+                    }
+
+                    public void onError(Throwable throwable) {
+                    }
+
+                    public void onComplete() {
+                    }
+                });
+            }
+        });
     }
 
     @Override
