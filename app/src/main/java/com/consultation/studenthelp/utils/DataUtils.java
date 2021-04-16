@@ -8,12 +8,13 @@ import org.litepal.LitePal;
 import java.util.List;
 
 public class DataUtils {
+    //获取问卷的方法
     public static List<Questionnaire> getQuestionnaireList() {
         return LitePal.findAll(Questionnaire.class);
     }
-
-    public static List<Question> getQuestionList(long id) {
-        return LitePal.where("questionnaire_id = ?", id + "").find(Question.class,true);
+    //获取问题的方法
+    public static List<Question> getQuestionList(long questionnaireId) {
+        return LitePal.where("questionnaire_id = ?", questionnaireId + "").find(Question.class,true);
     }
 
 }
