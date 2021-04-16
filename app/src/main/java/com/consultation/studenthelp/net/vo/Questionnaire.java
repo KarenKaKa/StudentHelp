@@ -14,6 +14,13 @@ public class Questionnaire extends LitePalSupport {
     private String scoringCriteria;//评分标准
     private List<Question> questionList;
 
+    public Questionnaire(String questionnaireTitle, String questionnaireSubTitle, String scoringCriteria, List<Question> questionList) {
+        this.questionnaireTitle = questionnaireTitle;
+        this.questionnaireSubTitle = questionnaireSubTitle;
+        this.scoringCriteria = scoringCriteria;
+        this.questionList = questionList;
+    }
+
     public Questionnaire(String questionnaireTitle, String questionnaireSubTitle, String scoringCriteria) {
         this.questionnaireTitle = questionnaireTitle;
         this.questionnaireSubTitle = questionnaireSubTitle;
