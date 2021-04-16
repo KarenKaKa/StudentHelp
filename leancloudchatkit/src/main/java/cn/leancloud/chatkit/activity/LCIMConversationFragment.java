@@ -212,12 +212,6 @@ public class LCIMConversationFragment extends Fragment {
      * @param message
      */
     public void sendMessage(AVIMMessage message, boolean addToList) {
-        if (addToList) {
-            itemAdapter.addMessage(message);
-        }
-        itemAdapter.notifyDataSetChanged();
-        scrollToBottom();
-
         AVIMMessageOption option = new AVIMMessageOption();
         if (message instanceof AVIMTextMessage) {
             AVIMTextMessage textMessage = (AVIMTextMessage) message;
@@ -232,7 +226,12 @@ public class LCIMConversationFragment extends Fragment {
         imConversation.sendMessage(message, option, new AVIMConversationCallback() {
             @Override
             public void done(AVIMException e) {
+//                itemAdapter.notifyDataSetChanged();
+                if (addToList) {
+                    itemAdapter.addMessage(message);
+                }
                 itemAdapter.notifyDataSetChanged();
+                scrollToBottom();
                 if (null != e) {
                     LCIMLogUtils.logException(e);
                 }
@@ -273,6 +272,7 @@ public class LCIMConversationFragment extends Fragment {
                     itemAdapter.addMessage(m);
                 }
                 itemAdapter.notifyDataSetChanged();
+                scrollToBottom();
                 clearUnreadConut();
             }
         });
