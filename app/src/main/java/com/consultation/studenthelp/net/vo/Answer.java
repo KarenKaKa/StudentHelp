@@ -1,5 +1,6 @@
 package com.consultation.studenthelp.net.vo;
 
+import org.litepal.annotation.Column;
 import org.litepal.crud.LitePalSupport;
 
 /**
@@ -10,6 +11,8 @@ public class Answer extends LitePalSupport {
     private String answerTitle;//答案描述
     private int score = 0;//答案分值
     private Question question;
+    @Column(ignore = true)
+    public boolean select;
 
     public Answer(String answerTitle, int score) {
         this.answerTitle = answerTitle;
