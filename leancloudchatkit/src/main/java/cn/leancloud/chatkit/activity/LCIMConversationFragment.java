@@ -226,7 +226,6 @@ public class LCIMConversationFragment extends Fragment {
         imConversation.sendMessage(message, option, new AVIMConversationCallback() {
             @Override
             public void done(AVIMException e) {
-//                itemAdapter.notifyDataSetChanged();
                 if (addToList) {
                     itemAdapter.addMessage(message);
                 }
