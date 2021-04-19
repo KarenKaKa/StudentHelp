@@ -92,16 +92,18 @@ public class TeacherMainActivity extends BaseActivity implements View.OnClickLis
         } else if (id == R.id.tvArt) {
             startActivity(new Intent(this, MyArticlesActivity.class));
         } else if (id == R.id.tvLogout) {
-            LCChatKit.getInstance().close(new AVIMClientCallback() {
-                @Override
-                public void done(AVIMClient avimClient, AVIMException e) {
-                    if (null != e) {
-                        e.printStackTrace();
-                    } else {
-                        finish();
+            if (AVUser.getCurrentUser() != null && AVUser.getCurrentUser().getObjectId() != null) {
+                LCChatKit.getInstance().close(new AVIMClientCallback() {
+                    @Override
+                    public void done(AVIMClient avimClient, AVIMException e) {
+                        if (null != e) {
+                            e.printStackTrace();
+                        } else {
+                            finish();
+                        }
                     }
-                }
-            });
+                });
+            }
             UserSpUtils.logout();
             startActivity(new Intent(this, LoginActivity.class));
             finish();

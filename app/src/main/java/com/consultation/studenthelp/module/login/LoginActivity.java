@@ -114,7 +114,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     }
 
     private void initIm() {
-        if (!UserSpUtils.getUserName().isEmpty()) {
+        if (AVUser.getCurrentUser() != null && AVUser.getCurrentUser().getObjectId() != null) {
             LCChatKit.getInstance().setProfileProvider(CustomUserProvider.getInstance());
             AVIMOptions.getGlobalOptions().setAutoOpen(true);
             LCChatKit.getInstance().open(AVUser.getCurrentUser().getObjectId(), new AVIMClientCallback() {

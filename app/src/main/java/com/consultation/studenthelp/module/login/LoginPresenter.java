@@ -95,11 +95,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> {
             }
 
             public void onNext(AVUser user) {
-                UserSpUtils.setIsLogin(true);
-                UserSpUtils.setUserType(userType);
-                UserSpUtils.setUserName(userName);
-                UserSpUtils.setUerId(user.getObjectId());
-                mRootView.loginSuccess();
+                login(userName, code, userType);
             }
 
             public void onError(Throwable throwable) {
